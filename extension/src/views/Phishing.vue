@@ -1,16 +1,16 @@
 <template>
   <div class="extension">
     <div class="row mb-4">
-      <div class="col-3">
+      <div class="col-2">
         <label for="url">URL</label>
       </div>
-      <div class="col-9">
+      <div class="col-10">
         <input v-model="url" type="text" id="url" name="url">
       </div>
     </div>
     <div class="d-flex fl-end">
       <button type="button" class="ps-btn btn-primary ps-btn" @click="getUrl">Get URL</button>
-      <button type="button" class="ps-btn btn-primary" @click="scanUrl">Scan URL</button>
+      <button :disable="!url" type="button" class="ps-btn btn-primary" @click="scanUrl">Scan URL</button>
     </div>
   </div>
 </template>
