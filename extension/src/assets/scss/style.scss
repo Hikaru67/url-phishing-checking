@@ -1,0 +1,82 @@
+@import '~bootstrap';
+
+body {
+    background: #f1f1f1;
+    font-family: tahoma;
+    margin: 10px;
+    font-size: 14px;
+}
+
+a {
+    text-decoration: none;
+}
+
+#app {
+    max-width: 400px;
+    margin: auto;
+    background: #fff;
+}
+
+#main {
+    padding: 30px;
+}
+
+.copyright {
+    font-size: 11px;
+    text-align: right;
+    padding: 10px;
+    padding-top: 0;
+}
+
+.extension {
+    .guide {
+        margin-bottom: 15px;
+        font-size: 14px;
+        text-align: center;
+    }
+
+    width: 300px;
+    margin: auto;
+
+    .toeic-check__content {
+        box-shadow: 0px 0px 15px 10px #00000038;
+    }
+
+    .toeic-check__url {
+        text-align: center;
+        box-shadow: none;
+        border: none;
+        border: 1px solid #ddd;
+    }
+
+    .message {
+        font-size: 14px;
+        font-style: italic;
+        margin-top: 3px;
+    }
+}
+
+.input-group {
+    &:after {
+        clear: both;
+        content: " ";
+        display: block;
+    }
+
+    .btn {
+        background-color: #3e7ca9;
+        border: none;
+        color: #fff;
+        padding: 10px 15px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    .input {
+        float: left;
+        width: calc(100% - 50px);
+    }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "Url phishing checking",
+  "description": "Checking url is malicious or not",
+  "version": "1.0",
+  "action": {
+    "default_icon": "logo.png",
+    "default_popup": "index.html"
+  },
+  "permissions": [
+    "tabs",
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "*://*.facebook.com/",
+    "*://*.facebook.com/TOEIClachuyennho",
+    "http://*/*",
+    "https://*/*"
+  ],
+  "manifest_version": 3
+}
