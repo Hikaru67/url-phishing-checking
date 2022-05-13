@@ -383,7 +383,7 @@ Create a list and a function that calls the other functions and stores all the f
 def featureExtraction(url):
     features = []
     # Address bar based features (10)
-    features.append(getDomain(url))
+    # features.append(getDomain(url))
     features.append(havingIP(url))
     features.append(haveAtSign(url))
     features.append(getLength(url))

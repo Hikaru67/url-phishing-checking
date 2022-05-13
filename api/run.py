@@ -16,7 +16,7 @@ def get_phishing_url():
         res = ast.literal_eval(data)
         url = list(res.values())[0]
     except:
-        return Response("Json Error!")
+        return Response("Something went wrong!")
 
     input_data = URLFeatureExtraction.featureExtraction(url)
     result = phishing_url.get_phishing_url(input_data)
