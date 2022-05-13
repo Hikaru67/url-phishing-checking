@@ -13,3 +13,4 @@ ipaddress
 urllib3
 bs4
 whois
+flask_mysqldb
