@@ -1,0 +1,15 @@
+flask-cors
+joblib
+catboost
+numpy
+pandas
+scikit-learn
+requests
+Flask
+xgboost
+lightgbm
+regex
+ipaddress
+urllib3
+bs4
+whois

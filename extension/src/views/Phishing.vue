@@ -43,11 +43,14 @@ export default {
         }, (result) => {
           this.url = result[0].result
         });
-        console.log('🚀 ~ res', res)
         this.loading = false;
       } catch (e) {
         this.loading = false;
       }
+    },
+
+    scanUrl() {
+
     }
   }
 }
