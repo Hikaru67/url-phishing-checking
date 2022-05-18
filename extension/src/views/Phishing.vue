@@ -15,6 +15,14 @@
   </div>
 </template>
 <script>
+import axios from 'axios'
+
+const URL = 'http://18.166.71.250/get_phishing_url'
+const LABEL = {
+  good: 'good',
+  bad: 'bad'
+}
+
 export default {
   data() {
     return {
@@ -49,8 +57,15 @@ export default {
       }
     },
 
-    scanUrl() {
-
+    async scanUrl() {
+      const { data } = await axios.post(URL, {
+        url: this.url
+      })
+      if (data.label === LABEL.good) {
+        alert('Its ok')
+      } else {
+        alert('So bad')
+      }
     }
   }
 }
