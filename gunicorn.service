@@ -1,0 +1,13 @@
+sudo nano /etc/systemd/system/application.service
+[Unit]
+Description=application.service - A Flask application run with Gunicorn.
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/phishing-api/
+ExecStart=/var/www/phishing-api/venv/bin/gunicorn --workers 3 --bind unix:/var/sockets/application.sock wsgi:app
+
+[Install]
+WantedBy=multi-user.target
