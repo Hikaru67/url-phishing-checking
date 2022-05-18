@@ -14,27 +14,27 @@ class UrlSeeder extends Seeder
      */
     public function run()
     {
-        $handle = fopen("black_list.txt", "r");
-        if ($handle) {
-            while (($line = fgets($handle)) !== false) {
-                Url::updateOrCreate([
-                    'url' => $line,
-                    'type' => Url::TYPE['BLACK_LIST']
-                ]);
-            }
-            fclose($handle);
-        }
+        // $handle = fopen("black_list.txt", "r");
+        // if ($handle) {
+        //     while (($line = fgets($handle)) !== false) {
+        //         Url::updateOrCreate([
+        //             'url' => $line,
+        //             'type' => Url::TYPE['BLACK_LIST']
+        //         ]);
+        //     }
+        //     fclose($handle);
+        // }
 
-        $handle = fopen("white_list.txt", "r");
-        if ($handle) {
-            while (($line = fgets($handle)) !== false) {
-                Url::updateOrCreate([
-                    'url' => $line,
-                    'type' => Url::TYPE['WHITE_LIST']
-                ]);
-            }
-            fclose($handle);
-        }
+        // $handle = fopen("white_list.txt", "r");
+        // if ($handle) {
+        //     while (($line = fgets($handle)) !== false) {
+        //         Url::updateOrCreate([
+        //             'url' => $line,
+        //             'type' => Url::TYPE['WHITE_LIST']
+        //         ]);
+        //     }
+        //     fclose($handle);
+        // }
 
         $urls = Url::all();
 
