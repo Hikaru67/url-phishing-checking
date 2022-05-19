@@ -82,22 +82,33 @@ def phishing_url():
 
 def check_phishing(data):
     model = phishing_url()
-    result = model.predict(data)
-    return result
+    result_1 = model.predict(data)
+    result_2 = model.predict_proba(data)
+    return result_1, result_2
 
 
 def get_phishing_url(data):
-    is_phishing_url = check_phishing(data)
-    if is_phishing_url == 1:
+    result_1, result_2 = check_phishing(data)
+    if result_1 == 1:
         label = 'bad'
     else:
         label = 'good'
+    print(result_2)
+    flag = np.argmax(result_2)
+    if flag == 0:
+        score = result_2[0] * 100
+    elif flag == 1:
+        score = result_2[1] * 100
+
     result = {}
 
     result.update({'label': label,
-                   'suggestion': config.MODEL_SUGGESTIONS[label]})
+                   'suggestion': config.MODEL_SUGGESTIONS[label],
+                   'Score': round(score, 2)})
     return result
 
 
 if __name__ == '__main__':
+    data = [0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0]
+    print(get_phishing_url(data))
     model_training()

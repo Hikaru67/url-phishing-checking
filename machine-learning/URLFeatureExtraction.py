@@ -383,7 +383,7 @@ Create a list and a function that calls the other functions and stores all the f
 def featureExtraction(url):
     features = []
     # Address bar based features (10)
-    # features.append(getDomain(url))
+    getDomain(url)
     features.append(havingIP(url))
     features.append(haveAtSign(url))
     features.append(getLength(url))
@@ -459,4 +459,6 @@ def get_data():
 if __name__ == '__main__':
     # get_data()
     url = 'https://translate.google.com/?hl=vi&sl=en&tl=vi&text=legitimate&op=translate'
+    # output = getDomain(url)
     output = featureExtraction(url)
+    print(output)
