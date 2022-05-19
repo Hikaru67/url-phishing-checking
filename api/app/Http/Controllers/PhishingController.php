@@ -15,15 +15,21 @@ class PhishingController extends Controller
         ]);
 
         $url = $request->get('url');
-        $result = Url::where('url', 'like', $url . '%')->get()->toArray();
-        if (!count($result) && !preg_match('/^(http|https)/u', $url)) {
-            $url = 'https://' + $url;
-            $result = Url::where('url', 'like', $url . '%')->get()->toArray();
+        $parseUrl = parse_url($url);
+        if ($parseUrl['host']) {
+            $result = Url::where('url', 'like', '%' . $parseUrl['host'] . '%')->first();
+        }
+        if (!$result) {
+            $result = Url::where('url', 'like', $url . '%')->first();
+            if ($result && !preg_match('/^(http|https)/u', $url)) {
+                $url = 'https://' + $url;
+                $result = Url::where('url', 'like', $url . '%')->first();
+            }
         }
 
-        if (count($result)) {
+        if ($result ) {
             return response()->json([
-                'label' => $result[0]['type'] ? 'bad' : 'good',
+                'label' => $result->type ? 'bad' : 'good',
                 'type' => 'success'
             ], 200);
         }
