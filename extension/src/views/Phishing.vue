@@ -17,7 +17,8 @@
 <script>
 import axios from 'axios'
 
-const URL = 'http://18.166.71.250/get_phishing_url'
+const URL = process.env.VUE_APP_URL
+
 const LABEL = {
   good: 'good',
   bad: 'bad'
@@ -33,6 +34,10 @@ export default {
 
   computed: {
 
+  },
+
+  created() {
+    this.getUrl()
   },
 
   methods: {
