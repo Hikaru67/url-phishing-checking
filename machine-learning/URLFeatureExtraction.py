@@ -314,10 +314,10 @@ def iframe(response):
     if response == "":
         return 1
     else:
-        if re.findall(r"[<iframe>|<frameBorder>]", response.text):
-            return 0
-        else:
+        if re.findall(r"(<iframe>|<frameBorder>|&lt;iframe&gt;|&lt;frameBorder&gt;)", response.text):
             return 1
+        else:
+            return 0
 
 
 """### **3.3.2. Status Bar Customization**
