@@ -333,7 +333,7 @@ def mouseOver(response):
     if response == "":
         return 1
     else:
-        if re.findall("<script>.+onmouseover.+</script>", response.text):
+        if re.findall('(onmouseover="[a-zA-Z\(\)]*"|addEventListener\("mouseover")', response.text):
             return 1
         else:
             return 0
