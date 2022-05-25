@@ -28,7 +28,7 @@ If the domain part of URL has IP address, the value assigned to this feature is 
 # 2.Checks for IP address in URL (Have_IP)
 def havingIP(url):
     try:
-        ipaddress.ip_address(url)
+        ipaddress.ip_address(urlparse(url).netloc)
         ip = 1
     except:
         ip = 0
@@ -54,14 +54,15 @@ def haveAtSign(url):
 
 """#### **3.1.4. Length of URL**
 
-Computes the length of the URL. Phishers can use long URL to hide the doubtful part in the address bar. In this project, if the length of the URL is greater than or equal 54 characters then the URL classified as phishing otherwise legitimate.
+Computes the length of the URL. Phishers can use long URL to hide the doubtful part in the address bar. In this project, if the length of the domain URL is greater than or equal 54 characters then the URL classified as phishing otherwise legitimate.
 
-If the length of URL >= 54 , the value assigned to this feature is 1 (phishing) or else 0 (legitimate).
+If the length of domain URL >= 54 , the value assigned to this feature is 1 (phishing) or else 0 (legitimate).
 """
 
 
 # 4.Finding the length of URL and categorizing (URL_Length)
 def getLength(url):
+    url = urlparse(url).netloc
     if len(url) < 54:
         length = 0
     else:
@@ -115,10 +116,10 @@ If the URL has "http/https" in the domain part, the value assigned to this featu
 """
 
 
-# 7.Existence of “HTTPS” Token in the Domain Part of the URL (https_Domain)
+# 7.Existence of “HTTP” Token in the Domain Part of the URL (https_Domain)
 def httpDomain(url):
     domain = urlparse(url).netloc
-    if 'https' in domain:
+    if 'http' in domain:
         return 1
     else:
         return 0
@@ -202,7 +203,7 @@ If the DNS record is empty or not found then, the value assigned to this feature
 
 This feature measures the popularity of the website by determining the number of visitors and the number of pages they visit. However, since phishing websites live for a short period of time, they may not be recognized by the Alexa database (Alexa the Web Information Company., 1996). By reviewing our dataset, we find that in worst scenarios, legitimate websites ranked among the top 100,000. Furthermore, if the domain has no traffic or is not recognized by the Alexa database, it is classified as “Phishing”.
 
-If the rank of the domain < 100000, the vlaue of this feature is 1 (phishing) else 0 (legitimate).
+If the rank of the domain > 100000, the value of this feature is 1 (phishing) else 0 (legitimate).
 """
 
 
@@ -213,12 +214,12 @@ def web_traffic(url):
         # Filling the whitespaces in the URL if any
         url = urllib.parse.quote(url)
         rank = \
-        BeautifulSoup(urllib.request.urlopen("http://data.alexa.com/data?cli=10&dat=s&url=" + url).read(), "xml").find(
+        BeautifulSoup(urllib.request.urlopen("https://data.alexa.com/data?cli=10&dat=s&url=" + url).read(), "xml").find(
             "REACH")['RANK']
         rank = int(rank)
     except TypeError:
         return 1
-    if rank < 100000:
+    if rank > 100000:
         return 1
     else:
         return 0
@@ -259,7 +260,7 @@ def domainAge(domain_name):
 
 This feature can be extracted from WHOIS database. For this feature, the remaining domain time is calculated by finding the different between expiration time & current time. The end period considered for the legitimate domain is 6 months or less  for this project. 
 
-If end period of domain > 6 months, the vlaue of this feature is 1 (phishing) else 0 (legitimate).
+If end period of domain < 6 months, the value of this feature is 1 (phishing) else 0 (legitimate).
 """
 
 
@@ -279,9 +280,9 @@ def domainEnd(domain_name):
         today = datetime.now()
         end = abs((expiration_date - today).days)
         if ((end / 30) < 6):
-            end = 0
-        else:
             end = 1
+        else:
+            end = 0
     return end
 
 

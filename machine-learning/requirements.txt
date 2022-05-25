@@ -13,5 +13,6 @@ ipaddress
 urllib3
 bs4
 whois
+python-whois
 gunicorn
 # flask_mysqldb
