@@ -16,7 +16,8 @@ class PhishingController extends Controller
 
         $url = $request->get('url');
         $parseUrl = parse_url($url);
-        if ($parseUrl['host']) {
+        $result = '';
+        if (isset($parseUrl['host']) && $parseUrl['host']) {
             $result = Url::where('url', 'like', '%' . $parseUrl['host'] . '%')->first();
         }
         if (!$result) {

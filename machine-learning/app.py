@@ -24,17 +24,17 @@ def get_phishing_url():
     data = request.data.decode()
     try:
         res = ast.literal_eval(data)
-        url = list(res.values())[0]
-        if url[0:8] == "https://":
-            url = 'https:/' + url[8:]
-        elif url[0:7] == "http://":
-            url = 'http:/' + url[7:]
+        # url = list(res.values())[0]
+        # if url[0:8] == "https://":
+        #     url = 'https:/' + url[8:]
+        # elif url[0:7] == "http://":
+        #     url = 'http:/' + url[7:]
     except:
         return Response("Something went wrong!")
 
     input_data = URLFeatureExtraction.featureExtraction(url)
     result = phishing_url.get_phishing_url(input_data)
-    return jsonify(result))
+    return jsonify(result)
 
 @app.route('/', methods=['GET'])
 def hello():
