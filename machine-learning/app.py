@@ -24,7 +24,7 @@ def get_phishing_url():
     data = request.data.decode()
     try:
         res = ast.literal_eval(data)
-        # url = list(res.values())[0]
+        url = list(res.values())[0]
         # if url[0:8] == "https://":
         #     url = 'https:/' + url[8:]
         # elif url[0:7] == "http://":
