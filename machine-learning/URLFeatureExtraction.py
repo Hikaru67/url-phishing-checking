@@ -209,7 +209,6 @@ If the rank of the domain > 100000, the value of this feature is 1 (phishing) el
 
 # 12.Web traffic (Web_Traffic)
 def web_traffic(url):
-    return 0
     try:
         # Filling the whitespaces in the URL if any
         url = urllib.parse.quote(url)
@@ -248,8 +247,9 @@ def domainAge(domain_name):
     elif ((type(expiration_date) is list) or (type(creation_date) is list)):
         return 1
     else:
-        ageofdomain = abs((expiration_date - creation_date).days)
-        if ((ageofdomain / 30) < 6):
+        ageOfDomain = abs((expiration_date - creation_date).days)
+        print(ageOfDomain)
+        if ((ageOfDomain / 30) < 6):
             age = 1
         else:
             age = 0
@@ -353,9 +353,9 @@ def rightClick(response):
         return 1
     else:
         if re.findall(r"event.button ?== ?2", response.text):
-            return 0
-        else:
             return 1
+        else:
+            return 0
 
 
 """### **3.3.4. Website Forwarding**
@@ -384,7 +384,7 @@ Create a list and a function that calls the other functions and stores all the f
 def featureExtraction(url):
     features = []
     # Address bar based features (10)
-    getDomain(url)
+    features.append(getDomain(url))
     features.append(havingIP(url))
     features.append(haveAtSign(url))
     features.append(getLength(url))
@@ -402,13 +402,13 @@ def featureExtraction(url):
         dns = 1
 
     features.append(dns)
-    # features.append(web_traffic(url))
+    features.append(web_traffic(url))
     features.append(1 if dns == 1 else domainAge(domain_name))
     features.append(1 if dns == 1 else domainEnd(domain_name))
 
     # HTML & Javascript based features
     try:
-        response = requests.get(url)
+        response = requests.get(url, timeout=8)
     except:
         response = ""
 
@@ -416,6 +416,7 @@ def featureExtraction(url):
     features.append(mouseOver(response))
     features.append(rightClick(response))
     features.append(forwarding(response))
+    print(features)
 
     return features
 
@@ -424,42 +425,62 @@ def featureExtraction(url):
 # converting the list to dataframe
 feature_names = ['Domain', 'Have_IP', 'Have_At', 'URL_Length', 'URL_Depth', 'Redirection',
                  'https_Domain', 'TinyURL', 'Prefix_Suffix', 'DNS_Record', 'Web_Traffic',
-                 'Domain_Age', 'Domain_End', 'iFrame', 'Mouse_Over', 'Right_Click', 'Web_Forwards', 'Label']
+                 'Domain_Age', 'Domain_End', 'iFrame', 'Mouse_Over', 'Right_Click', 'Web_Forwards']
 
 def get_data():
     all_result_phishing = []
-    all_result_legatimate = []
 
-    f1 = open("data/1000-phishing.txt", "r")
-    f2 = open("data/1135-legitimate_urls.txt", "r")
-    i = 0
-    j = 0
-    for line in f1:
-        result_phishing = featureExtraction(line)
-        result_phishing.append(1)
-        all_result_phishing.append(result_phishing)
-        print("i = ", i)
-        # print(result_phishing)
-        print(all_result_phishing)
-        i += 1
+    f1 = open("processed.txt", "r")
+    lines = f1.readlines()
+    for i in range(len(lines)):
+        lines[i] = lines[i].replace('[','').replace(']','').replace("'",'').replace('\n','').split(', ')
+        for j in range(len(lines[i])):
+            if j>0:
+                lines[i][j] = int(lines[i][j])
+    f1.close()
 
-    for line in f2:
-        result_legatimate= featureExtraction(line)
-        result_legatimate.append(0)
-        all_result_legatimate.append(result_legatimate)
-        print("j = ", j)
-        print(result_legatimate)
-        j += 1
+    f2 = open("legate.txt", "r")
+    legates = f2.readlines()
+    for i in range(len(legates)):
+        legates[i] = legates[i].replace('\n','').split(', ')
+        for j in range(len(legates[i])):
+            if j>0:
+                legates[i][j] = int(legates[i][j])
+        legates[i][len(legates[i])-1] = 0
+        lines.append(legates[i])
+    f2.close()
+    all_result_phishing = pd.DataFrame(lines)
+    all_result_phishing.to_csv('data/new-processed2.csv')
 
-    all_result_phishing = pd.DataFrame(all_result_phishing)
-    all_result_phishing.to_csv('data/1000-phishing_processed.csv')
+    # all_result_legitimate = pd.DataFrame(lines)
+    # all_result_legitimate.to_csv('data/new-processed-legate.csv')
 
-    all_result_legatimate = pd.DataFrame(all_result_legatimate)
-    all_result_legatimate.to_csv('data/1135-legitimate_processed.csv')
+def extract_feature(type, index):
+    all_result_phishing = []
+    all_result_legitimate = []
+
+    f1 = open("data/legate.txt", "r")
+    i = index
+
+    lines = f1.readlines()
+    while ((i-index) < 200 or i < len(lines)):
+        try:
+            f1 = open("data/legate_" + str(index) + ".txt", "a")
+            result_phishing = featureExtraction(lines[i].replace('\n', ''))
+            result_phishing.append(type)
+            all_result_phishing.append(result_phishing)
+            f1.write(str(result_phishing).replace('[','').replace(']','').replace("'",'') + '\n')
+            f1.close()
+            print("i = ", i)
+            i += 1
+        except:
+            i += 1
+            pass
 
 if __name__ == '__main__':
     # get_data()
     url = 'https://translate.google.com/?hl=vi&sl=en&tl=vi&text=legitimate&op=translate'
     # output = getDomain(url)
-    output = featureExtraction(url)
+    # output = featureExtraction(url)
+    get_data(0)
     print(output)
