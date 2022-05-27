@@ -33,6 +33,7 @@ def get_phishing_url():
         return Response("Something went wrong!")
 
     input_data = URLFeatureExtraction.featureExtraction(url)
+    input_data = input_data[slice(1, len(input_data))]
     result = phishing_url.get_phishing_url(input_data)
     return jsonify(result)
 

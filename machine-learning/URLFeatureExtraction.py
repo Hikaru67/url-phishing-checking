@@ -14,7 +14,7 @@ Here, we are just extracting the domain present in the URL. This feature doesn't
 def getDomain(url):
   domain = urlparse(url).netloc
   if re.match(r"^www.",domain):
-	       domain = domain.replace("www.","")
+    domain = domain.replace("www.","")
   return domain
 
 """#### **3.1.2. IP Address in the URL**
@@ -248,7 +248,6 @@ def domainAge(domain_name):
         return 1
     else:
         ageOfDomain = abs((expiration_date - creation_date).days)
-        print(ageOfDomain)
         if ((ageOfDomain / 30) < 6):
             age = 1
         else:
@@ -397,8 +396,10 @@ def featureExtraction(url):
     # Domain based features (4)
     dns = 0
     try:
-        domain_name = whois.whois(urlparse(url).netloc)
-    except:
+        flags = 0
+        flags = flags | whois.NICClient.WHOIS_QUICK
+        domain_name = whois.whois(urlparse(url).netloc, flags=flags)
+    except Exception:
         dns = 1
 
     features.append(dns)
@@ -416,7 +417,7 @@ def featureExtraction(url):
     features.append(mouseOver(response))
     features.append(rightClick(response))
     features.append(forwarding(response))
-    print(features)
+    # print(features)
 
     return features
 
@@ -433,7 +434,7 @@ def get_data():
     f1 = open("processed.txt", "r")
     lines = f1.readlines()
     for i in range(len(lines)):
-        lines[i] = lines[i].replace('[','').replace(']','').replace("'",'').replace('\n','').split(', ')
+        lines[i] = lines[i].replace('\n','').split(', ')
         for j in range(len(lines[i])):
             if j>0:
                 lines[i][j] = int(lines[i][j])
@@ -446,7 +447,6 @@ def get_data():
         for j in range(len(legates[i])):
             if j>0:
                 legates[i][j] = int(legates[i][j])
-        legates[i][len(legates[i])-1] = 0
         lines.append(legates[i])
     f2.close()
     all_result_phishing = pd.DataFrame(lines)
@@ -459,28 +459,23 @@ def extract_feature(type, index):
     all_result_phishing = []
     all_result_legitimate = []
 
-    f1 = open("data/legate.txt", "r")
+    f1 = open("data_prepare/blacklist.txt", "r")
     i = index
 
     lines = f1.readlines()
-    while ((i-index) < 200 or i < len(lines)):
+    while ((i-index) < 200):
         try:
-            f1 = open("data/legate_" + str(index) + ".txt", "a")
+            f1 = open("data_prepare/legate4/legate_" + str(int(index/200)) + ".txt", "a")
             result_phishing = featureExtraction(lines[i].replace('\n', ''))
+            print(result_phishing, "i = ", i)
             result_phishing.append(type)
             all_result_phishing.append(result_phishing)
             f1.write(str(result_phishing).replace('[','').replace(']','').replace("'",'') + '\n')
             f1.close()
-            print("i = ", i)
             i += 1
         except:
             i += 1
             pass
 
 if __name__ == '__main__':
-    # get_data()
-    url = 'https://translate.google.com/?hl=vi&sl=en&tl=vi&text=legitimate&op=translate'
-    # output = getDomain(url)
-    # output = featureExtraction(url)
-    get_data(0)
-    print(output)
+    get_data()

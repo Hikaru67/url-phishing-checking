@@ -20,7 +20,7 @@ def split_data():
                 'Right_Click', 'Web_Forwards']
     X = df[features]
     y = df['Label']
-    X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=config.TRAINING_RATE)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.1)
 
     X_train.to_csv(f'{config.PATH_SAVE_DATA}/X_train.csv')
     X_test.to_csv(f'{config.PATH_SAVE_DATA}/X_test.csv')
@@ -43,7 +43,7 @@ def model_training():
                 'Right_Click', 'Web_Forwards']
     X = df[features]
     y = df['Label']
-    # X_train, X_test, y_train, y_test = split_data()
+    X_train, X_test, y_train, y_test = split_data()
     model = CatBoostClassifier(learning_rate = 0.01, depth = 8, rsm = 1)
     model.fit(X, y)
     save_model(model)
@@ -109,6 +109,6 @@ def get_phishing_url(data):
 
 
 if __name__ == '__main__':
-    data = [0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0]
-    print(get_phishing_url(data))
+    # data = [0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0]
+    # print(get_phishing_url(data))
     model_training()
