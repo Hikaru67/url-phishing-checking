@@ -102,9 +102,12 @@ def get_phishing_url(data):
 
     result = {}
 
-    result.update({'label': label,
-                   'suggestion': config.MODEL_SUGGESTIONS[label],
-                   'Score': round(score, 2)})
+    result.update({
+        'label': label,
+        'suggestion': config.MODEL_SUGGESTIONS[label],
+        'percent': round(score, 2),
+        'features': data
+    })
     return result
 
 
