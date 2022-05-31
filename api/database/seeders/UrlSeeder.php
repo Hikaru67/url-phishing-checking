@@ -14,39 +14,39 @@ class UrlSeeder extends Seeder
      */
     public function run()
     {
-        // $handle = fopen("black_list.txt", "r");
-        // if ($handle) {
-        //     while (($line = fgets($handle)) !== false) {
-        //         Url::updateOrCreate([
-        //             'url' => $line,
-        //             'type' => Url::TYPE['BLACK_LIST']
-        //         ]);
-        //     }
-        //     fclose($handle);
-        // }
-
-        // $handle = fopen("white_list.txt", "r");
-        // if ($handle) {
-        //     while (($line = fgets($handle)) !== false) {
-        //         Url::updateOrCreate([
-        //             'url' => $line,
-        //             'type' => Url::TYPE['WHITE_LIST']
-        //         ]);
-        //     }
-        //     fclose($handle);
-        // }
-
-        $urls = Url::all();
-
-        foreach($urls as $url) {
-            try {
-                if (preg_match('/\/$/', $url->url)) {
-                    $url->url = preg_replace('/\/$/', '', $url->url);
-                    $url->save();
-                }
-            } catch (\Exception $ex) {
-                continue;
+        $handle = fopen("black_list.txt", "r");
+        if ($handle) {
+            while (($line = fgets($handle)) !== false) {
+                Url::updateOrCreate([
+                    'url' => $line,
+                    'type' => Url::TYPE['BLACK_LIST']
+                ]);
             }
+            fclose($handle);
         }
+
+        $handle = fopen("white_list.txt", "r");
+        if ($handle) {
+            while (($line = fgets($handle)) !== false) {
+                Url::updateOrCreate([
+                    'url' => $line,
+                    'type' => Url::TYPE['WHITE_LIST']
+                ]);
+            }
+            fclose($handle);
+        }
+
+        // $urls = Url::all();
+
+        // foreach($urls as $url) {
+        //     try {
+        //         if (preg_match('/\/$/', $url->url)) {
+        //             $url->url = preg_replace('/\/$/', '', $url->url);
+        //             $url->save();
+        //         }
+        //     } catch (\Exception $ex) {
+        //         continue;
+        //     }
+        // }
     }
 }
