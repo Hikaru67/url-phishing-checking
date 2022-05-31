@@ -4,7 +4,7 @@
             <router-view />
         </div>
         <div class="copyright">
-            Copyright <a target="_blank" href="">all4you</a>
+            Copyright <a target="_blank" href="">HoiChaoHanh</a>
         </div>
     </div>
 </template>

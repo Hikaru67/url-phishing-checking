@@ -1,9 +1,7 @@
 @import '~bootstrap';
 
 body {
-    background: #f1f1f1;
     font-family: tahoma;
-    margin: 10px;
     font-size: 14px;
 }
 
@@ -12,20 +10,19 @@ a {
 }
 
 #app {
-    max-width: 400px;
+    max-width: 320px;
     margin: auto;
     background: #fff;
 }
 
 #main {
-    padding: 30px;
+    // padding: 30px;
 }
 
 .copyright {
     font-size: 11px;
     text-align: right;
-    padding: 10px;
-    padding-top: 0;
+    padding: 10px 10px 0;
 }
 
 .extension {
@@ -79,4 +76,1183 @@ a {
         float: left;
         width: calc(100% - 50px);
     }
+}
+
+.circle {
+	height: 1em;
+	width: 1em;
+	position: relative;
+	display: inline-block;
+	border-radius: 50%;
+	font-size: 100%;
+	box-sizing: content-box;
+	font-size: 200px;
+	&:after {
+		content: "";
+		height: 100%;
+		width: 100%;
+		position: absolute;
+		top: 0%;
+		left: 0%;
+		border-radius: 50%;
+		box-sizing: border-box;
+		border: solid 0.1em #cccccc;
+		z-index: -1;
+	}
+	& > span {
+		width: 100%;
+		height: 100%;
+		text-align: center;
+		display: block;
+		font-size: .2em;
+		position: absolute;
+		top: 0;
+		left: 0;
+		line-height: 5em;
+		z-index: 9999;
+		color: var(--color);
+		white-space: nowrap;
+		box-sizing: content-box;
+		border-radius: 50%;
+	}
+	& > .bar {
+		height: 100%;
+		width: 100%;
+		position: absolute;
+		box-sizing: content-box;
+	}
+	&.big {
+		font-size: 300px;
+	}
+	&.medium {
+		font-size: 200px;
+	}
+	&.small {
+		font-size: 100px;
+	}
+	&.x-small {
+		font-size: 80px;
+	}
+}
+.circle >.bar:before,
+.circle >.bar:after {
+	content: '';
+	height: 80%;
+	width: 80%;
+	position: absolute;
+	border: solid 0.1em var(--color);
+	border-radius: 50%;
+	box-sizing: content-box;
+	clip: rect(0,0.5em,1em,0);
+}
+.circle[data-fill="0"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,0deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,0deg,0deg));
+		}
+	}
+}
+.circle[data-fill="1"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,3.6deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,3.6deg,0deg));
+		}
+	}
+}
+.circle[data-fill="2"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,7.2deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,7.2deg,0deg));
+		}
+	}
+}
+.circle[data-fill="3"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,10.8deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,10.8deg,0deg));
+		}
+	}
+}
+.circle[data-fill="4"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,14.4deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,14.4deg,0deg));
+		}
+	}
+}
+.circle[data-fill="5"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,18deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,18deg,0deg));
+		}
+	}
+}
+.circle[data-fill="6"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,21.6deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,21.6deg,0deg));
+		}
+	}
+}
+.circle[data-fill="7"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,25.2deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,25.2deg,0deg));
+		}
+	}
+}
+.circle[data-fill="8"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,28.8deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,28.8deg,0deg));
+		}
+	}
+}
+.circle[data-fill="9"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,32.4deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,32.4deg,0deg));
+		}
+	}
+}
+.circle[data-fill="10"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,36deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,36deg,0deg));
+		}
+	}
+}
+.circle[data-fill="11"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,39.6deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,39.6deg,0deg));
+		}
+	}
+}
+.circle[data-fill="12"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,43.2deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,43.2deg,0deg));
+		}
+	}
+}
+.circle[data-fill="13"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,46.8deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,46.8deg,0deg));
+		}
+	}
+}
+.circle[data-fill="14"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,50.4deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,50.4deg,0deg));
+		}
+	}
+}
+.circle[data-fill="15"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,54deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,54deg,0deg));
+		}
+	}
+}
+.circle[data-fill="16"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,57.6deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,57.6deg,0deg));
+		}
+	}
+}
+.circle[data-fill="17"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,61.2deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,61.2deg,0deg));
+		}
+	}
+}
+.circle[data-fill="18"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,64.8deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,64.8deg,0deg));
+		}
+	}
+}
+.circle[data-fill="19"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,68.4deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,68.4deg,0deg));
+		}
+	}
+}
+.circle[data-fill="20"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,72deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,72deg,0deg));
+		}
+	}
+}
+.circle[data-fill="21"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,75.6deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,75.6deg,0deg));
+		}
+	}
+}
+.circle[data-fill="22"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,79.2deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,79.2deg,0deg));
+		}
+	}
+}
+.circle[data-fill="23"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,82.8deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,82.8deg,0deg));
+		}
+	}
+}
+.circle[data-fill="24"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,86.4deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,86.4deg,0deg));
+		}
+	}
+}
+.circle[data-fill="25"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,90deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,90deg,0deg));
+		}
+	}
+}
+.circle[data-fill="26"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,93.6deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,93.6deg,0deg));
+		}
+	}
+}
+.circle[data-fill="27"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,97.2deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,97.2deg,0deg));
+		}
+	}
+}
+.circle[data-fill="28"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,100.8deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,100.8deg,0deg));
+		}
+	}
+}
+.circle[data-fill="29"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,104.4deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,104.4deg,0deg));
+		}
+	}
+}
+.circle[data-fill="30"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,108deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,108deg,0deg));
+		}
+	}
+}
+.circle[data-fill="31"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,111.6deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,111.6deg,0deg));
+		}
+	}
+}
+.circle[data-fill="32"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,115.2deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,115.2deg,0deg));
+		}
+	}
+}
+.circle[data-fill="33"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,118.8deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,118.8deg,0deg));
+		}
+	}
+}
+.circle[data-fill="34"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,122.4deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,122.4deg,0deg));
+		}
+	}
+}
+.circle[data-fill="35"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,126deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,126deg,0deg));
+		}
+	}
+}
+.circle[data-fill="36"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,129.6deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,129.6deg,0deg));
+		}
+	}
+}
+.circle[data-fill="37"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,133.2deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,133.2deg,0deg));
+		}
+	}
+}
+.circle[data-fill="38"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,136.8deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,136.8deg,0deg));
+		}
+	}
+}
+.circle[data-fill="39"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,140.4deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,140.4deg,0deg));
+		}
+	}
+}
+.circle[data-fill="40"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,144deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,144deg,0deg));
+		}
+	}
+}
+.circle[data-fill="41"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,147.6deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,147.6deg,0deg));
+		}
+	}
+}
+.circle[data-fill="42"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,151.2deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,151.2deg,0deg));
+		}
+	}
+}
+.circle[data-fill="43"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,154.8deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,154.8deg,0deg));
+		}
+	}
+}
+.circle[data-fill="44"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,158.4deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,158.4deg,0deg));
+		}
+	}
+}
+.circle[data-fill="45"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,162deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,162deg,0deg));
+		}
+	}
+}
+.circle[data-fill="46"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,165.6deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,165.6deg,0deg));
+		}
+	}
+}
+.circle[data-fill="47"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,169.2deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,169.2deg,0deg));
+		}
+	}
+}
+.circle[data-fill="48"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,172.8deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,172.8deg,0deg));
+		}
+	}
+}
+.circle[data-fill="49"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,176.4deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,176.4deg,0deg));
+		}
+	}
+}
+.circle[data-fill="50"] {
+	& > .bar {
+		clip: if(true,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(true,180deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,180deg,0deg));
+		}
+	}
+}
+.circle[data-fill="51"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,183.6deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(false,183.6deg,0deg));
+		}
+	}
+}
+.circle[data-fill="52"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,187.2deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,187.2deg,0deg));
+		}
+	}
+}
+.circle[data-fill="53"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,190.8deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,190.8deg,0deg));
+		}
+	}
+}
+.circle[data-fill="54"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,194.4deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,194.4deg,0deg));
+		}
+	}
+}
+.circle[data-fill="55"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,198deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,198deg,0deg));
+		}
+	}
+}
+.circle[data-fill="56"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,201.6deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,201.6deg,0deg));
+		}
+	}
+}
+.circle[data-fill="57"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,205.2deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,205.2deg,0deg));
+		}
+	}
+}
+.circle[data-fill="58"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,208.8deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,208.8deg,0deg));
+		}
+	}
+}
+.circle[data-fill="59"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,212.4deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,212.4deg,0deg));
+		}
+	}
+}
+.circle[data-fill="60"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,216deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,216deg,0deg));
+		}
+	}
+}
+.circle[data-fill="61"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,219.6deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,219.6deg,0deg));
+		}
+	}
+}
+.circle[data-fill="62"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,223.2deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,223.2deg,0deg));
+		}
+	}
+}
+.circle[data-fill="63"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,226.8deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,226.8deg,0deg));
+		}
+	}
+}
+.circle[data-fill="64"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,230.4deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,230.4deg,0deg));
+		}
+	}
+}
+.circle[data-fill="65"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,234deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,234deg,0deg));
+		}
+	}
+}
+.circle[data-fill="66"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,237.6deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,237.6deg,0deg));
+		}
+	}
+}
+.circle[data-fill="67"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,241.2deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,241.2deg,0deg));
+		}
+	}
+}
+.circle[data-fill="68"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,244.8deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,244.8deg,0deg));
+		}
+	}
+}
+.circle[data-fill="69"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,248.4deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,248.4deg,0deg));
+		}
+	}
+}
+.circle[data-fill="70"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,252deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,252deg,0deg));
+		}
+	}
+}
+.circle[data-fill="71"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,255.6deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,255.6deg,0deg));
+		}
+	}
+}
+.circle[data-fill="72"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,259.2deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,259.2deg,0deg));
+		}
+	}
+}
+.circle[data-fill="73"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,262.8deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,262.8deg,0deg));
+		}
+	}
+}
+.circle[data-fill="74"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,266.4deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,266.4deg,0deg));
+		}
+	}
+}
+.circle[data-fill="75"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,270deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,270deg,0deg));
+		}
+	}
+}
+.circle[data-fill="76"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,273.6deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,273.6deg,0deg));
+		}
+	}
+}
+.circle[data-fill="77"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,277.2deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,277.2deg,0deg));
+		}
+	}
+}
+.circle[data-fill="78"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,280.8deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,280.8deg,0deg));
+		}
+	}
+}
+.circle[data-fill="79"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,284.4deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,284.4deg,0deg));
+		}
+	}
+}
+.circle[data-fill="80"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,288deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,288deg,0deg));
+		}
+	}
+}
+.circle[data-fill="81"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,291.6deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,291.6deg,0deg));
+		}
+	}
+}
+.circle[data-fill="82"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,295.2deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,295.2deg,0deg));
+		}
+	}
+}
+.circle[data-fill="83"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,298.8deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,298.8deg,0deg));
+		}
+	}
+}
+.circle[data-fill="84"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,302.4deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,302.4deg,0deg));
+		}
+	}
+}
+.circle[data-fill="85"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,306deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,306deg,0deg));
+		}
+	}
+}
+.circle[data-fill="86"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,309.6deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,309.6deg,0deg));
+		}
+	}
+}
+.circle[data-fill="87"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,313.2deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,313.2deg,0deg));
+		}
+	}
+}
+.circle[data-fill="88"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,316.8deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,316.8deg,0deg));
+		}
+	}
+}
+.circle[data-fill="89"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,320.4deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,320.4deg,0deg));
+		}
+	}
+}
+.circle[data-fill="90"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,324deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,324deg,0deg));
+		}
+	}
+}
+.circle[data-fill="91"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,327.6deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,327.6deg,0deg));
+		}
+	}
+}
+.circle[data-fill="92"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,331.2deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,331.2deg,0deg));
+		}
+	}
+}
+.circle[data-fill="93"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,334.8deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,334.8deg,0deg));
+		}
+	}
+}
+.circle[data-fill="94"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,338.4deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,338.4deg,0deg));
+		}
+	}
+}
+.circle[data-fill="95"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,342deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,342deg,0deg));
+		}
+	}
+}
+.circle[data-fill="96"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,345.6deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,345.6deg,0deg));
+		}
+	}
+}
+.circle[data-fill="97"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,349.2deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,349.2deg,0deg));
+		}
+	}
+}
+.circle[data-fill="98"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,352.8deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,352.8deg,0deg));
+		}
+	}
+}
+.circle[data-fill="99"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,356.4deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,356.4deg,0deg));
+		}
+	}
+}
+.circle[data-fill="100"] {
+	& > .bar {
+		clip: if(false,rect(0,1em,1em,0.5em),rect(auto,auto,auto));
+		&:before {
+			transform: rotate(if(false,360deg,180deg));
+		}
+		&:after {
+			transform: rotate(if(true,360deg,0deg));
+		}
+	}
 }
