@@ -26,7 +26,8 @@ def get_phishing_url():
     try:
         res = ast.literal_eval(data)
         url = list(res.values())[0]
-        url = base64.b64decode(url).decode('utf-8')
+        if isBase64(url):
+            url = base64.b64decode(url).decode('utf-8')
         # if url[0:8] == "https://":
         #     url = 'https:/' + url[8:]
         # elif url[0:7] == "http://":
@@ -42,6 +43,12 @@ def get_phishing_url():
 @app.route('/', methods=['GET'])
 def hello():
     return "<h1 style='color:blue'>Hello There!</h1>"
+
+def isBase64(s):
+    try:
+        return base64.b64encode(base64.b64decode(s)).decode('utf-8') == s
+    except Exception:
+        return False
 
 # @app.route('/', methods=['GET'])
 # @cross_origin()

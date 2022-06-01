@@ -1,0 +1,14 @@
+[Unit]
+Description=My Python Application
+After=network.target
+
+[Service]
+User=root
+WorkingDirectory=/var/www/url-phishing-checking/machine-learning
+Environment="PATH=/var/www/url-phishing-checking/machine-learning/venv/`bin"
+ExecStart=/var/www/url-phishing-checking/machine-learning/venv/bin/uwsgi --ini app.ini
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
