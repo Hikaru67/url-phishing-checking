@@ -3,6 +3,7 @@ from flask import Response
 from flask_cors import CORS, cross_origin
 import ast
 import config
+import base64
 
 import URLFeatureExtraction
 import phishing_url
@@ -25,6 +26,7 @@ def get_phishing_url():
     try:
         res = ast.literal_eval(data)
         url = list(res.values())[0]
+        url = base64.b64decode(url).decode('utf-8')
         # if url[0:8] == "https://":
         #     url = 'https:/' + url[8:]
         # elif url[0:7] == "http://":

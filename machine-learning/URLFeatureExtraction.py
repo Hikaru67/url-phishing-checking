@@ -384,6 +384,7 @@ def featureExtraction(url):
     features = []
     # Address bar based features (10)
     features.append(getDomain(url))
+
     features.append(havingIP(url))
     features.append(haveAtSign(url))
     features.append(getLength(url))
@@ -431,7 +432,7 @@ feature_names = ['Domain', 'Have_IP', 'Have_At', 'URL_Length', 'Redirection',
 def get_data():
     all_result_phishing = []
 
-    f1 = open("processed.txt", "r")
+    f1 = open("data_prepare/legate2/legate_processed.txt", "r")
     lines = f1.readlines()
     for i in range(len(lines)):
         lines[i] = lines[i].replace('\n','').split(', ')
@@ -440,7 +441,7 @@ def get_data():
                 lines[i][j] = int(lines[i][j])
     f1.close()
 
-    f2 = open("legate.txt", "r")
+    f2 = open("data_prepare/phishing/phishing_processed.txt", "r")
     legates = f2.readlines()
     for i in range(len(legates)):
         legates[i] = legates[i].replace('\n','').split(', ')
@@ -450,7 +451,7 @@ def get_data():
         lines.append(legates[i])
     f2.close()
     all_result_phishing = pd.DataFrame(lines)
-    all_result_phishing.to_csv('data/new-processed2.csv')
+    all_result_phishing.to_csv('data/new-processed3.csv')
 
     # all_result_legitimate = pd.DataFrame(lines)
     # all_result_legitimate.to_csv('data/new-processed-legate.csv')
@@ -480,14 +481,14 @@ def extract_feature(type, index):
             pass
 
 if __name__ == '__main__':
-    import argparse
-    parser = argparse.ArgumentParser(
-        description='This program prints the name of my dogs'
-    )
-    parser.add_argument('-t', '-type')
-    parser.add_argument('-i', '-index')
+    # import argparse
+    # parser = argparse.ArgumentParser(
+    #     description='This program prints the name of my dogs'
+    # )
+    # parser.add_argument('-t', '-type')
+    # parser.add_argument('-i', '-index')
     
-    args = parser.parse_args()  
-    extract_feature(args.t, args.i)
+    # args = parser.parse_args()  
+    # extract_feature(args.t, args.i)
 
-    # get_data()
+    get_data()

@@ -14,10 +14,10 @@ import utils
 
 def split_data():
     df = pd.read_csv(config.PATH_DATA_ALL)
-    features = ['Have_IP', 'Have_At', 'URL_Length', 'URL_Depth',
-                'Redirection', 'https_Domain', 'TinyURL', 'Prefix_Suffix', 'DNS_Record',
-                'Domain_Age', 'Domain_End', 'iFrame', 'Mouse_Over',
-                'Right_Click', 'Web_Forwards']
+    features = ['Have_IP', 'Have_At', 'URL_Length',
+                'Redirection', 'https_Domain', 'TinyURL', 'Prefix_Suffix',
+                'DNS_Record', 'Web_Traffic', 'Domain_Age', 'Domain_End',
+                'iFrame', 'Mouse_Over', 'Right_Click', 'Web_Forwards']
     X = df[features]
     y = df['Label']
     X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.1)
@@ -37,10 +37,10 @@ def save_model(model):
 
 def model_training():
     df = pd.read_csv(config.PATH_DATA_ALL)
-    features = ['Have_IP', 'Have_At', 'URL_Length', 'URL_Depth',
-                'Redirection', 'https_Domain', 'TinyURL', 'Prefix_Suffix', 'DNS_Record',
-                'Domain_Age', 'Domain_End', 'iFrame', 'Mouse_Over',
-                'Right_Click', 'Web_Forwards']
+    features = ['Have_IP', 'Have_At', 'URL_Length',
+                'Redirection', 'https_Domain', 'TinyURL', 'Prefix_Suffix',
+                'DNS_Record', 'Web_Traffic', 'Domain_Age', 'Domain_End',
+                'iFrame', 'Mouse_Over', 'Right_Click', 'Web_Forwards']
     X = df[features]
     y = df['Label']
     X_train, X_test, y_train, y_test = split_data()
