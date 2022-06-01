@@ -31,7 +31,9 @@ class PhishingController extends Controller
         if ($result ) {
             return response()->json([
                 'label' => $result->type ? 'bad' : 'good',
-                'type' => 'success'
+                'type' => 'success',
+                'percent' => 86,
+                'features' => []
             ], 200);
         }
 

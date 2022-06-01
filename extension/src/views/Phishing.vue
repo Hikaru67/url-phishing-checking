@@ -5,6 +5,7 @@
       <div class="row mb-2 mt-2">
         <div class="text-center">
           {{ getDomain }}
+          <font-awesome-icon class="ml-2 reload" icon="fa-solid fa-rotate-right" @click="scanUrl" />
           <!-- <input v-model="url" type="text" id="url" name="url"> -->
         </div>
       </div>
@@ -34,8 +35,8 @@ export default {
   data() {
     return {
       loading: false,
-      url: 'https://github.com/karl-lunarg',
-      label: 1,
+      url: 'https://garena-sukien-skinsss.com/',
+      label: 0,
       features: [],
       percent: 80,
     }
@@ -58,13 +59,19 @@ export default {
     }
   },
 
+  watch: {
+    url() {
+      this.scanUrl()
+    }
+  },
+
   created() {
     this.getUrl()
   },
 
-  mounted() {
-    this.scanUrl()
-  },
+  // mounted() {
+  //   this.scanUrl()
+  // },
 
   methods: {
     async getUrl() {
@@ -89,18 +96,24 @@ export default {
     },
 
     async scanUrl() {
+      if (!this.url) {
+        return
+      }
       const { data } = await axios.post(URL_MC, {
         url: this.url
       })
+      console.log('🚀 ~ data', data)
       if (data.label === LABEL.good) {
         this.label = 1
-        this.percent = data.percent
-        this.features = data.percent
       } else {
-        this.label = 1
-        this.percent = data.percent
-        this.features = data.percent
+        this.label = 0
       }
+      this.percent = Math.round(data.percent)
+      this.features = data.features
+    },
+
+    test() {
+      this.url = 'https://shopeefood.vn/ha-noi/happy-lunch-vu-huu?smtt=0.0.9'
     }
   }
 }
@@ -144,5 +157,13 @@ export default {
 .btn-report {
   background-color: rgb(65 66 94 / 98%);
   border-color: rgb(65 66 94 / 98%);
+}
+.reload {
+  &:hover {
+    cursor: reload;
+  }
+  display: inline-block;
+  margin-left: 10px;
+  color: green;
 }
 </style>
