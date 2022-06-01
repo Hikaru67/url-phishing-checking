@@ -2,20 +2,23 @@
   <div>
     <img class="background" src="../../public/background.png" alt="" />
     <div class="extension">
-      <div class="row mb-2 mt-2">
+      <div v-if="loading" class="loader" />
+      <div :class="loading ? 'shader' : ''">
+        <div class="row mb-2 mt-2">
         <div class="text-center">
           {{ getDomain }}
           <font-awesome-icon class="ml-2 reload" icon="fa-solid fa-rotate-right" @click="scanUrl" />
           <!-- <input v-model="url" type="text" id="url" name="url"> -->
         </div>
-      </div>
-      <div class="m-auto">
-        <div class="circle small" :data-fill="percent" hour :style="getColor">
-          <span>{{ percent }}%</span>
-          <div class="bar"></div>
         </div>
+        <div class="m-auto">
+          <div class="circle small" :data-fill="percent" hour :style="getColor">
+            <span>{{ percent }}%</span>
+            <div class="bar"></div>
+          </div>
+        </div>
+        <div class="text-center mb-2" :class="label ? 'status' : 'status-alert'">{{ getStatus }}</div>
       </div>
-      <div class="text-center mb-2" :class="label ? 'status' : 'status-alert'">{{ getStatus }}</div>
       <button v-if="features.length" type="button" class="btn btn-success mb-2">Xem chi tiết</button>
       <button type="button" class="btn btn-report">Báo cáo</button>
     </div>
@@ -38,7 +41,7 @@ export default {
       url: 'https://garena-sukien-skinsss.com/',
       label: 0,
       features: [],
-      percent: 80,
+      percent: 86,
     }
   },
 
@@ -75,7 +78,6 @@ export default {
 
   methods: {
     async getUrl() {
-      this.loading = true;
       const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
       const tabId = tab.id;
       try {
@@ -89,9 +91,7 @@ export default {
         }, (result) => {
           this.url = result[0].result
         });
-        this.loading = false;
       } catch (e) {
-        this.loading = false;
       }
     },
 
@@ -99,6 +99,8 @@ export default {
       if (!this.url) {
         return
       }
+      this.loading = true
+      this.percent = 0
       const { data } = await axios.post(URL_MC, {
         url: this.url
       })
@@ -110,6 +112,7 @@ export default {
       }
       this.percent = Math.round(data.percent)
       this.features = data.features
+      this.loading = false
     },
 
     test() {
@@ -165,5 +168,8 @@ export default {
   display: inline-block;
   margin-left: 10px;
   color: green;
+}
+.shader {
+  opacity: 0.3;
 }
 </style>
