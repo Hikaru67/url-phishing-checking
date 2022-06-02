@@ -2,28 +2,129 @@
 
 # importing required packages for this section
 from urllib.parse import urlparse, urlencode
+import tldextract
 import ipaddress
 import pandas as pd
 import re
-
-"""#### **3.1.1. Domain of the URL**
-Here, we are just extracting the domain present in the URL. This feature doesn't have much significance in the training. May even be dropped while training the model.
-"""
+import favicon
 
 # 1.Domain of the URL (Domain) 
+#scheme='https', netloc='www.google.com', path='/search', params='', query='q=hostname&sxsrf=', fragment='imgrc=b5k8yyIPXWAtPM')
 def getDomain(url):
   domain = urlparse(url).netloc
   if re.match(r"^www.",domain):
     domain = domain.replace("www.","")
   return domain
 
-"""#### **3.1.2. IP Address in the URL**
+# 1. Number of character '.' in URL
+def numDots(url):
+    try:
+        return url.count('.')
+    except:
+        return 0
 
-Checks for the presence of IP address in the URL. URLs may have IP address instead of domain name. If an IP address is used as an alternative of the domain name in the URL, we can be sure that someone is trying to steal personal information with this URL.
+# ExtractResult(subdomain='lol1', domain='domain', suffix='com')
+def subdomainLevel(url):
+    try:
+        subdomain = tldextract.extract(url)
+        if len(subdomain):
+            return subdomain.count('.') + 1
+        return 0
+    except:
+        return 0
 
-If the domain part of URL has IP address, the value assigned to this feature is 1 (phishing) or else 0 (legitimate).
-"""
+# 4.Finding the length of URL and categorizing (URL_Length)
+def urlLength(url):
+    return len(url)
 
+# 3.Gives number of '/' in URL (URL_Depth)
+def getDepth(url):
+    try:
+        s = urlparse(url).path.split('/')
+        depth = 0
+        for j in range(len(s)):
+            if len(s[j]) != 0:
+                depth = depth + 1
+        return depth
+    except:
+        return 0
+
+# 1. Number of character '-' in URL
+def numDashes(url):
+    try:
+        return url.count('-')
+    except:
+        return 0
+
+# 1. Number of character '-' in URL
+def numDashesInHostname(url):
+    try:
+        return len(urlparse(url).netloc.split('-')) - 1
+    except:
+        return 0
+
+# 3.Checks the presence of @ in URL (Have_At)
+def haveAtSign(url):
+    if "@" in url:
+        at = 1
+    else:
+        at = 0
+    return at
+
+def haveTildeSymbol(url):
+    if "~" in url:
+        at = 1
+    else:
+        at = 0
+    return at
+
+def numUnderscore(url):
+    try:
+        return url.count('_')
+    except:
+        return 0
+
+def numPercent(url):
+    try:
+        return url.count('%')
+    except:
+        return 0
+
+def numQueryComponents(url):
+    try:
+        query = urlparse(url).query
+        return query.count('&') + 1
+    except:
+        return 0
+
+def numAmpersand(url):
+    try:
+        return url.count('&')
+    except:
+        return 0
+
+def numHash(url):
+    try:
+        return url.count('#')
+    except:
+        return 0
+
+def numNumericChars(url):
+    try:
+        return len(re.sub("[^0-9]", "", url))
+    except:
+        return 0
+
+def noHttps(url):
+    try:
+        domain = urlparse(url).netloc
+        if 'https' in domain:
+            return 1
+        else:
+            return 0
+    except:
+        ip = 0
+    return ip
 
 # 2.Checks for IP address in URL (Have_IP)
 def havingIP(url):
@@ -34,59 +135,90 @@ def havingIP(url):
         ip = 0
     return ip
 
+# ExtractResult(subdomain='lol1', domain='domain', suffix='com')
+def domainInSubdomains(url):
+    try:
+        subdomain = tldextract.extract(url).subdomain
+        if len(subdomain):
+            if (len(tldextract.extract(url).suffix)):
+                return 1
+        return 0
+    except:
+        return 0
 
-"""#### **3.1.3. "@" Symbol in URL**
+def domainInPaths(url):
+    try:
+        path = urlparse(url).path.split('/')
+        for pa in path:
+            if (len(tldextract.extract(url).suffix)):
+                return 1
+        return 0
+    except:
+        return 0
 
-Checks for the presence of '@' symbol in the URL. Using “@” symbol in the URL leads the browser to ignore everything preceding the “@” symbol and the real address often follows the “@” symbol. 
+def httpInHostname(url):
+    try:
+        hostname = urlparse(url).netloc
+        if 'http' in hostname:
+            return 1
+        return 0
+    except:
+        return 0
 
-If the URL has '@' symbol, the value assigned to this feature is 1 (phishing) or else 0 (legitimate).
-"""
+def pathLength(url):
+    try:
+        path = urlparse(url).path
+        return len(path)
+    except:
+        return 0
 
+def queryLength(url):
+    try:
+        query = urlparse(url).query
+        return len(query)
+    except:
+        return 0
 
-# 3.Checks the presence of @ in URL (Have_At)
-def haveAtSign(url):
-    if "@" in url:
-        at = 1
-    else:
-        at = 0
-    return at
+def doubleSlashInPath(url):
+    try:
+        path = urlparse(url).path
+        if '//' in path:
+            return 1
+        return 0
+    except:
+        return 0
 
+def numSensitiveWords(url):
+    try:
+        count = 0
+        sensitiveWords = ['secure', 'account', 'webscr', 'login', 'ebayisapi', 'sign in', 'banking', 'confirm']
+        for sen in sensitiveWords:
+            if sen in url:
+                count += 1
+        return count
+    except:
+        return 0
 
-"""#### **3.1.4. Length of URL**
+# def embeddedBrandName(url):
+# def pctExtHyperlinks(url):
+def extFavicon(url):
+    try:
+        hostname = urlparse(url).netloc
+        favicons = favicon.get(url)
+        for favicon in favicons:
+            if hostname != urlparse(favicon.url).netloc:
+                return 1
+        return 0
+    except:
+        return 0
 
-Computes the length of the URL. Phishers can use long URL to hide the doubtful part in the address bar. In this project, if the length of the domain URL is greater than or equal 54 characters then the URL classified as phishing otherwise legitimate.
-
-If the length of domain URL >= 54 , the value assigned to this feature is 1 (phishing) or else 0 (legitimate).
-"""
-
-
-# 4.Finding the length of URL and categorizing (URL_Length)
-def getLength(url):
-    url = urlparse(url).netloc
-    if len(url) < 54:
-        length = 0
-    else:
-        length = 1
-    return length
-
-
-"""#### **3.1.5. Depth of URL**
-
-Computes the depth of the URL. This feature calculates the number of sub pages in the given url based on the '/'.
-
-The value of feature is a numerical based on the URL.
-"""
-
-
-# 5.Gives number of '/' in URL (URL_Depth)
-def getDepth(url):
-    s = urlparse(url).path.split('/')
-    depth = 0
-    for j in range(len(s)):
-        if len(s[j]) != 0:
-            depth = depth + 1
-    return depth
-
+# def insecureForms
+# def relativeFormAction
+# def ExtFormAction
+# def AbnormalFormAction
+# def PctNullSelfRedirectHyperlinks
+# def FrequentDomainNameMismatch
+# def FakeLinkInStatusBar
 
 """#### **3.1.6. Redirection "//" in URL**
 
@@ -94,7 +226,6 @@ Checks the presence of "//" in the URL. The existence of “//” within the URL
 
 If the "//" is anywhere in the URL apart from after the protocal, thee value assigned to this feature is 1 (phishing) or else 0 (legitimate).
 """
-
 
 # 6.Checking for redirection '//' in the url (Redirection)
 def redirection(url):
@@ -108,21 +239,7 @@ def redirection(url):
         return 0
 
 
-"""#### **3.1.7. "http/https" in Domain name**
 
-Checks for the presence of "http/https" in the domain part of the URL. The phishers may add the “HTTPS” token to the domain part of a URL in order to trick users.
-
-If the URL has "http/https" in the domain part, the value assigned to this feature is 1 (phishing) or else 0 (legitimate).
-"""
-
-
-# 7.Existence of “HTTP” Token in the Domain Part of the URL (https_Domain)
-def httpDomain(url):
-    domain = urlparse(url).netloc
-    if 'http' in domain:
-        return 1
-    else:
-        return 0
 
 
 """#### **3.1.8. Using URL Shortening Services “TinyURL”**
@@ -190,21 +307,8 @@ import urllib
 import urllib.request
 from datetime import datetime
 
-"""#### **3.2.1. DNS Record**
-
-For phishing websites, either the claimed identity is not recognized by the WHOIS database or no records founded for the hostname. 
-If the DNS record is empty or not found then, the value assigned to this feature is 1 (phishing) or else 0 (legitimate).
-"""
-
 # 11.DNS Record availability (DNS_Record)
 # obtained in the featureExtraction function itself
-
-"""#### **3.2.2. Web Traffic**
-
-This feature measures the popularity of the website by determining the number of visitors and the number of pages they visit. However, since phishing websites live for a short period of time, they may not be recognized by the Alexa database (Alexa the Web Information Company., 1996). By reviewing our dataset, we find that in worst scenarios, legitimate websites ranked among the top 100,000. Furthermore, if the domain has no traffic or is not recognized by the Alexa database, it is classified as “Phishing”.
-
-If the rank of the domain > 100000, the value of this feature is 1 (phishing) else 0 (legitimate).
-"""
 
 
 # 12.Web traffic (Web_Traffic)
@@ -213,24 +317,14 @@ def web_traffic(url):
         # Filling the whitespaces in the URL if any
         url = urllib.parse.quote(url)
         rank = \
-        BeautifulSoup(urllib.request.urlopen("https://data.alexa.com/data?cli=10&dat=s&url=" + url).read(), "xml").find(
-            "REACH")['RANK']
+        BeautifulSoup(urllib.request.urlopen("https://data.alexa.com/data?cli=10&dat=s&url=" + url).read(), "xml").find("REACH")['RANK']
         rank = int(rank)
     except TypeError:
         return 1
-    if rank > 100000:
+    if rank > 1000000:
         return 1
     else:
         return 0
-
-
-"""#### **3.2.3. Age of Domain**
-
-This feature can be extracted from WHOIS database. Most phishing websites live for a short period of time. The minimum age of the legitimate domain is considered to be 12 months for this project. Age here is nothing but different between creation and expiration time.
-
-If age of domain > 12 months, the vlaue of this feature is 1 (phishing) else 0 (legitimate).
-"""
-
 
 # 13.Survival time of domain: The difference between termination time and creation time (Domain_Age)
 def domainAge(domain_name):
@@ -254,15 +348,6 @@ def domainAge(domain_name):
             age = 0
     return age
 
-
-"""#### **3.2.4. End Period of Domain**
-
-This feature can be extracted from WHOIS database. For this feature, the remaining domain time is calculated by finding the different between expiration time & current time. The end period considered for the legitimate domain is 6 months or less  for this project. 
-
-If end period of domain < 6 months, the value of this feature is 1 (phishing) else 0 (legitimate).
-"""
-
-
 # 14.End time of domain: The difference between termination time and current time (Domain_End)
 def domainEnd(domain_name):
     expiration_date = domain_name.expiration_date
@@ -284,29 +369,8 @@ def domainEnd(domain_name):
             end = 0
     return end
 
-
-"""## **3.3. HTML and JavaScript based Features**
-
-Many features can be extracted that come under this category. Out of them, below mentioned were considered for this project.
-
-*   IFrame Redirection
-*   Status Bar Customization
-*   Disabling Right Click
-*   Website Forwarding
-
-Each of these features are explained and the coded below:
-"""
-
 # importing required packages for this section
 import requests
-
-"""### **3.3.1. IFrame Redirection**
-
-IFrame is an HTML tag used to display an additional webpage into one that is currently shown. Phishers can make use of the “iframe” tag and make it invisible i.e. without frame borders. In this regard, phishers make use of the “frameBorder” attribute which causes the browser to render a visual delineation. 
-
-If the iframe is empty or repsonse is not found then, the value assigned to this feature is 1 (phishing) or else 0 (legitimate).
-"""
-
 
 # 15. IFrame Redirection (iFrame)
 def iframe(response):
@@ -318,15 +382,6 @@ def iframe(response):
         else:
             return 0
 
-
-"""### **3.3.2. Status Bar Customization**
-
-Phishers may use JavaScript to show a fake URL in the status bar to users. To extract this feature, we must dig-out the webpage source code, particularly the “onMouseOver” event, and check if it makes any changes on the status bar
-
-If the response is empty or onmouseover is found then, the value assigned to this feature is 1 (phishing) or else 0 (legitimate).
-"""
-
-
 # 16.Checks the effect of mouse over on status bar (Mouse_Over)
 def mouseOver(response):
     if response == "":
@@ -336,15 +391,6 @@ def mouseOver(response):
             return 1
         else:
             return 0
-
-
-"""### **3.3.3. Disabling Right Click**
-
-Phishers use JavaScript to disable the right-click function, so that users cannot view and save the webpage source code. This feature is treated exactly as “Using onMouseOver to hide the Link”. Nonetheless, for this feature, we will search for event “event.button==2” in the webpage source code and check if the right click is disabled.
-
-If the response is empty or onmouseover is not found then, the value assigned to this feature is 1 (phishing) or else 0 (legitimate).
-"""
-
 
 # 17.Checks the status of the right click attribute (Right_Click)
 def rightClick(response):
@@ -356,12 +402,6 @@ def rightClick(response):
         else:
             return 0
 
-
-"""### **3.3.4. Website Forwarding**
-The fine line that distinguishes phishing websites from legitimate ones is how many times a website has been redirected. In our dataset, we find that legitimate websites have been redirected one time max. On the other hand, phishing websites containing this feature have been redirected at least 4 times.
-"""
-
-
 # 18.Checks the number of forwardings (Web_Forwards)
 def forwarding(response):
     if response == "":
@@ -372,11 +412,33 @@ def forwarding(response):
         else:
             return 1
 
+def rankHost(url):
+    try:
+        # Filling the whitespaces in the URL if any
+        url = urllib.parse.quote(url)
+        rank = \
+        xml = BeautifulSoup(urllib.request.urlopen("https://data.alexa.com/data?cli=10&dat=s&url=" + url).read(), "xml")
+        rank = xml.find("COUNTRY")['RANK']
+        rank = int(rank)
+        if rank < 1000000:
+            return 1
+        return 0
+    except TypeError:
+        return 0
 
-"""## **4. Computing URL Features**
-
-Create a list and a function that calls the other functions and stores all the features of the URL in the list. We will extract the features of each URL and append to this list.
-"""
+def rankCountry(url):
+    try:
+        # Filling the whitespaces in the URL if any
+        url = urllib.parse.quote(url)
+        rank = \
+        xml = BeautifulSoup(urllib.request.urlopen("https://data.alexa.com/data?cli=10&dat=s&url=" + url).read(), "xml")
+        rank = xml.find("COUNTRY")['RANK']
+        rank = int(rank)
+        if rank < 1000000:
+            return 1
+        return 0
+    except TypeError:
+        return 0
 
 
 # Function to extract features
@@ -387,7 +449,7 @@ def featureExtraction(url):
 
     features.append(havingIP(url))
     features.append(haveAtSign(url))
-    features.append(getLength(url))
+    features.append(urlLength(url))
     # features.append(getDepth(url))
     features.append(redirection(url))
     features.append(httpDomain(url))
