@@ -425,9 +425,10 @@ def featureExtraction(url):
 
 
 # converting the list to dataframe
-feature_names = ['Domain', 'Have_IP', 'Have_At', 'URL_Length', 'Redirection',
-                 'https_Domain', 'TinyURL', 'Prefix_Suffix', 'DNS_Record', 'Web_Traffic',
-                 'Domain_Age', 'Domain_End', 'iFrame', 'Mouse_Over', 'Right_Click', 'Web_Forwards']
+feature_names = ['Domain', 'Have_IP', 'Have_At', 'URL_Length', 'URL_Depth',
+                 'Redirection', 'https_Domain', 'TinyURL', 'Prefix_Suffix',
+                 'DNS_Record', 'Web_Traffic', 'Domain_Age', 'Domain_End',
+                 'iFrame', 'Mouse_Over', 'Right_Click', 'Web_Forwards']
 
 def get_data():
     all_result_phishing = []
@@ -460,7 +461,7 @@ def extract_feature(type, index):
     all_result_phishing = []
     all_result_legitimate = []
 
-    f1 = open("data_prepare/phishing/phishing.txt", "r")
+    f1 = open("data_prepare/top5000com.txt", "r")
     index = int(index)
     type = int(type)
     i = index
@@ -468,7 +469,7 @@ def extract_feature(type, index):
     lines = f1.readlines()
     while ((i-index) < 1000):
         try:
-            f1 = open("data_prepare/phishing/phishing_" + str(int(index/1000)) + ".txt", "a")
+            f1 = open("data_prepare/non-phishing/legate_" + str(int(index/1000)) + ".txt", "a")
             result_phishing = featureExtraction(lines[i].replace('\n', ''))
             print(result_phishing, "i = ", i)
             result_phishing.append(type)
@@ -481,14 +482,14 @@ def extract_feature(type, index):
             pass
 
 if __name__ == '__main__':
-    # import argparse
-    # parser = argparse.ArgumentParser(
-    #     description='This program prints the name of my dogs'
-    # )
-    # parser.add_argument('-t', '-type')
-    # parser.add_argument('-i', '-index')
+    import argparse
+    parser = argparse.ArgumentParser(
+        description='This program prints the name of my dogs'
+    )
+    parser.add_argument('-t', '-type')
+    parser.add_argument('-i', '-index')
     
-    # args = parser.parse_args()  
-    # extract_feature(args.t, args.i)
+    args = parser.parse_args()  
+    extract_feature(args.t, args.i)
 
-    get_data()
+    # get_data()

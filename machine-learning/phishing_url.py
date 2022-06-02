@@ -14,7 +14,7 @@ import utils
 
 def split_data():
     df = pd.read_csv(config.PATH_DATA_ALL)
-    features = ['Have_IP', 'Have_At', 'URL_Length',
+    features = ['Have_IP', 'Have_At', 'URL_Length', 'URL_Depth',
                 'Redirection', 'https_Domain', 'TinyURL', 'Prefix_Suffix',
                 'DNS_Record', 'Web_Traffic', 'Domain_Age', 'Domain_End',
                 'iFrame', 'Mouse_Over', 'Right_Click', 'Web_Forwards']
@@ -37,7 +37,7 @@ def save_model(model):
 
 def model_training():
     df = pd.read_csv(config.PATH_DATA_ALL)
-    features = ['Have_IP', 'Have_At', 'URL_Length',
+    features = ['Have_IP', 'Have_At', 'URL_Length', 'URL_Depth',
                 'Redirection', 'https_Domain', 'TinyURL', 'Prefix_Suffix',
                 'DNS_Record', 'Web_Traffic', 'Domain_Age', 'Domain_End',
                 'iFrame', 'Mouse_Over', 'Right_Click', 'Web_Forwards']
