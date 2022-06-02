@@ -59,7 +59,7 @@ def numDashes(url):
 # 1. Number of character '-' in URL
 def numDashesInHostname(url):
     try:
-        return len(urlparse(url).netloc.split('-')) - 1
+        return urlparse(url).netloc.count('-')
     except:
         return 0
 
@@ -117,14 +117,13 @@ def numNumericChars(url):
 
 def noHttps(url):
     try:
-        domain = urlparse(url).netloc
-        if 'https' in domain:
-            return 1
-        else:
+        scheme = urlparse(url).scheme
+        if 'https' in scheme:
             return 0
+        else:
+            return 1
     except:
-        ip = 0
-    return ip
+        return 1
 
 # 2.Checks for IP address in URL (Have_IP)
 def havingIP(url):
@@ -238,17 +237,6 @@ def redirection(url):
     else:
         return 0
 
-
-
-
-
-"""#### **3.1.8. Using URL Shortening Services “TinyURL”**
-
-URL shortening is a method on the “World Wide Web” in which a URL may be made considerably smaller in length and still lead to the required webpage. This is accomplished by means of an “HTTP Redirect” on a domain name that is short, which links to the webpage that has a long URL. 
-
-If the URL is using Shortening Services, the value assigned to this feature is 1 (phishing) or else 0 (legitimate).
-"""
-
 # listing shortening services
 shortening_services = r"bit\.ly|goo\.gl|shorte\.st|go2l\.ink|x\.co|ow\.ly|t\.co|tinyurl|tr\.im|is\.gd|cli\.gs|" \
                       r"yfrog\.com|migre\.me|ff\.im|tiny\.cc|url4\.eu|twit\.ac|su\.pr|twurl\.nl|snipurl\.com|" \
@@ -268,34 +256,12 @@ def tinyURL(url):
     else:
         return 0
 
-
-"""#### **3.1.9. Prefix or Suffix "-" in Domain**
-
-Checking the presence of '-' in the domain part of URL. The dash symbol is rarely used in legitimate URLs. Phishers tend to add prefixes or suffixes separated by (-) to the domain name so that users feel that they are dealing with a legitimate webpage. 
-
-If the URL has '-' symbol in the domain part of the URL, the value assigned to this feature is 1 (phishing) or else 0 (legitimate).
-"""
-
-
 # 9.Checking for Prefix or Suffix Separated by (-) in the Domain (Prefix/Suffix)
 def prefixSuffix(url):
     if '-' in urlparse(url).netloc:
         return 1  # phishing
     else:
         return 0  # legitimate
-
-
-"""### **3.2. Domain Based Features:**
-
-Many features can be extracted that come under this category. Out of them, below mentioned were considered for this project.
-
-*   DNS Record
-*   Website Traffic 
-*   Age of Domain
-*   End Period of Domain
-
-Each of these features are explained and the coded below:
-"""
 
 # !pip install python-whois
 
@@ -311,20 +277,20 @@ from datetime import datetime
 # obtained in the featureExtraction function itself
 
 
-# 12.Web traffic (Web_Traffic)
-def web_traffic(url):
-    try:
-        # Filling the whitespaces in the URL if any
-        url = urllib.parse.quote(url)
-        rank = \
-        BeautifulSoup(urllib.request.urlopen("https://data.alexa.com/data?cli=10&dat=s&url=" + url).read(), "xml").find("REACH")['RANK']
-        rank = int(rank)
-    except TypeError:
-        return 1
-    if rank > 1000000:
-        return 1
-    else:
-        return 0
+# # 12.Web traffic (Web_Traffic)
+# def web_traffic(url):
+#     try:
+#         # Filling the whitespaces in the URL if any
+#         url = urllib.parse.quote(url)
+#         rank = \
+#         BeautifulSoup(urllib.request.urlopen("https://data.alexa.com/data?cli=10&dat=s&url=" + url).read(), "xml").find("REACH")['RANK']
+#         rank = int(rank)
+#     except TypeError:
+#         return 1
+#     if rank > 1000000:
+#         return 1
+#     else:
+#         return 0
 
 # 13.Survival time of domain: The difference between termination time and creation time (Domain_Age)
 def domainAge(domain_name):
@@ -369,6 +335,34 @@ def domainEnd(domain_name):
             end = 0
     return end
 
+def rankHost(url):
+    try:
+        # Filling the whitespaces in the URL if any
+        url = urllib.parse.quote(url)
+        rank = \
+        xml = BeautifulSoup(urllib.request.urlopen("https://data.alexa.com/data?cli=10&dat=s&url=" + url).read(), "xml")
+        rank = xml.find("REACH")['RANK']
+        rank = int(rank)
+        if rank > 1000000:
+            return 1
+        return 0
+    except TypeError:
+        return 1
+
+def rankCountry(url):
+    try:
+        # Filling the whitespaces in the URL if any
+        url = urllib.parse.quote(url)
+        rank = \
+        xml = BeautifulSoup(urllib.request.urlopen("https://data.alexa.com/data?cli=10&dat=s&url=" + url).read(), "xml")
+        rank = xml.find("COUNTRY")['RANK']
+        rank = int(rank)
+        if rank > 1000000:
+            return 1
+        return 0
+    except TypeError:
+        return 1
+
 # importing required packages for this section
 import requests
 
@@ -412,49 +406,46 @@ def forwarding(response):
         else:
             return 1
 
-def rankHost(url):
-    try:
-        # Filling the whitespaces in the URL if any
-        url = urllib.parse.quote(url)
-        rank = \
-        xml = BeautifulSoup(urllib.request.urlopen("https://data.alexa.com/data?cli=10&dat=s&url=" + url).read(), "xml")
-        rank = xml.find("COUNTRY")['RANK']
-        rank = int(rank)
-        if rank < 1000000:
-            return 1
-        return 0
-    except TypeError:
-        return 0
-
-def rankCountry(url):
-    try:
-        # Filling the whitespaces in the URL if any
-        url = urllib.parse.quote(url)
-        rank = \
-        xml = BeautifulSoup(urllib.request.urlopen("https://data.alexa.com/data?cli=10&dat=s&url=" + url).read(), "xml")
-        rank = xml.find("COUNTRY")['RANK']
-        rank = int(rank)
-        if rank < 1000000:
-            return 1
-        return 0
-    except TypeError:
-        return 0
-
 
 # Function to extract features
 def featureExtraction(url):
     features = []
     # Address bar based features (10)
     features.append(getDomain(url))
-
-    features.append(havingIP(url))
-    features.append(haveAtSign(url))
+    
+    features.append(subdomainLevel(url))
     features.append(urlLength(url))
-    # features.append(getDepth(url))
+    features.append(getDepth(url))
+    features.append(haveAtSign(url))
+    features.append(haveTildeSymbol(url))
+    features.append(noHttps(url))
+    features.append(havingIP(url))
+    features.append(domainInSubdomains(url))
+    features.append(domainInPaths(url))
+    features.append(httpInHostname(url))
+    features.append(doubleSlashInPath(url))
+
+    features.append(numDots(url))
+    features.append(numDashesInHostname(url))
+    features.append(numUnderscore(url))
+    features.append(numPercent(url))
+    features.append(numQueryComponents(url))
+    features.append(numAmpersand(url))
+    features.append(numHash(url))
+    features.append(numNumericChars(url))
+    features.append(pathLength(url))
+    features.append(queryLength(url))
+    features.append(numSensitiveWords(url))
+
+    features.append(extFavicon(url))
     features.append(redirection(url))
-    features.append(httpDomain(url))
     features.append(tinyURL(url))
     features.append(prefixSuffix(url))
+
+    # features.append(getDepth(url))
+    # features.append(redirection(url))
+    # features.append(tinyURL(url))
+    # features.append(prefixSuffix(url))
 
     # Domain based features (4)
     dns = 0
@@ -466,9 +457,11 @@ def featureExtraction(url):
         dns = 1
 
     features.append(dns)
-    features.append(web_traffic(url))
     features.append(1 if dns == 1 else domainAge(domain_name))
     features.append(1 if dns == 1 else domainEnd(domain_name))
+    
+    features.append(rankHost(url))
+    features.append(rankCountry(url))
 
     # HTML & Javascript based features
     try:
