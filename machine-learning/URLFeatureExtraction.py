@@ -415,7 +415,7 @@ def featureExtraction(url):
     
     features.append(subdomainLevel(url))
     features.append(urlLength(url))
-    features.append(getDepth(url))
+    # features.append(getDepth(url))
     features.append(haveAtSign(url))
     features.append(haveTildeSymbol(url))
     features.append(noHttps(url))
@@ -480,10 +480,44 @@ def featureExtraction(url):
 
 
 # converting the list to dataframe
-feature_names = ['Domain', 'Have_IP', 'Have_At', 'URL_Length', 'URL_Depth',
-                 'Redirection', 'https_Domain', 'TinyURL', 'Prefix_Suffix',
-                 'DNS_Record', 'Web_Traffic', 'Domain_Age', 'Domain_End',
-                 'iFrame', 'Mouse_Over', 'Right_Click', 'Web_Forwards']
+feature_names = [
+    'Domain',
+    'Subdomain_Level',
+    'Url_Length',
+    'Url_Depth',
+    'Have_At_Sign',
+    'Have_Tilde_Symbol',
+    'No_Https',
+    'Having_IP',
+    'Domain_In_Subdomains',
+    'Domain_In_Paths',
+    'Http_In_Hostname',
+    'Double_Slash_In_Path',
+    'Num_Dots',
+    'Num_Dashes_In_Hostname',
+    'Num_Underscore',
+    'Num_Percent',
+    'Num_Query_Components',
+    'Num_Ampersand',
+    'Num_Hash',
+    'Num_Numeric_Chars',
+    'Path_Length',
+    'Query_Length',
+    'Num_Sensitive_Words',
+    'Ext_Favicon',
+    'Redirection',
+    'Tiny_URL',
+    'Prefix_Suffix',
+    'DNS',
+    'Domain_Age',
+    'Domain_End',
+    'Rank_Host',
+    'Rank_Country',
+    'Iframe',
+    'Mouse_Over',
+    'Right_Click',
+    'Forwarding'
+]
 
 def prepareData():
     all_result_phishing = []
@@ -512,7 +546,7 @@ def prepareData():
     # all_result_legitimate = pd.DataFrame(lines)
     # all_result_legitimate.to_csv('data/new-processed-legate.csv')
 
-def extractFeaturePhishing(type, index):    
+def extractFeaturePhishing(type, index, limit = 1000):    
     all_result_phishing = []
     all_result_legitimate = []
 
@@ -520,12 +554,12 @@ def extractFeaturePhishing(type, index):
     index = int(index)
     type = int(type)
     i = index
-    index = int(index/200) * 200
+    index = int(index/limit) * limit
 
     lines = f1.readlines()
-    while ((i-index) < 200):
+    while ((i-index) < limit):
         try:
-            f1 = open("data_prepare/phishing2/phishing_" + str(int(index/200)) + ".txt", "a")
+            f1 = open("data_prepare/phishing2/phishing_" + str(int(index/limit)) + ".txt", "a")
             result_phishing = featureExtraction(lines[i].replace('\n', ''))
             print(result_phishing, "i = ", i)
             result_phishing.append(type)
@@ -537,7 +571,7 @@ def extractFeaturePhishing(type, index):
             i += 1
             pass
 
-def extractFeatureLegate(type, index):
+def extractFeatureLegate(type, index, limit = 1000):
     all_result_phishing = []
     all_result_legitimate = []
 
@@ -545,12 +579,12 @@ def extractFeatureLegate(type, index):
     index = int(index)
     type = int(type)
     i = index
-    index = int(index/200) * 200
+    index = int(index/limit) * limit
 
     lines = f1.readlines()
-    while ((i-index) < 200):
+    while ((i-index) < limit):
         try:
-            f1 = open("data_prepare/legate2/legate" + str(int(index/200)) + ".txt", "a")
+            f1 = open("data_prepare/legate2/legate_" + str(int(index/limit)) + ".txt", "a")
             result_phishing = featureExtraction(lines[i].replace('\n', ''))
             print(result_phishing, "i = ", i)
             result_phishing.append(type)

@@ -1,4 +1,4 @@
-PATH_DATA_ALL = 'data/urldata.csv'
+PATH_DATA_ALL = 'data/newProcessed.csv'
 PATH_SAVE_DATA = 'data_save'
 PATH_SAVE_MODEL = 'model'
 TRAINING_RATE = 0
