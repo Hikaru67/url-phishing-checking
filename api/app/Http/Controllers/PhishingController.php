@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Url;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 
 class PhishingController extends Controller
@@ -15,6 +16,11 @@ class PhishingController extends Controller
         ]);
 
         $url = $request->get('url');
+        if (Cache::has($url)) {
+            $cacheValue = Cache::get($url);
+
+            return response()->json($cacheValue, 200);
+        };
         $parseUrl = parse_url($url);
         $result = '';
         if (isset($parseUrl['host']) && $parseUrl['host']) {
@@ -39,18 +45,24 @@ class PhishingController extends Controller
         }
 
         if ($result ) {
-            return response()->json([
+            $res = [
                 'label' => $result->type ? 'bad' : 'good',
                 'type' => 'success',
-                'percent' => 86,
+                'percent' => 98,
                 'features' => []
-            ], 200);
+            ];
+            Cache::put($url, $res, now()->addMinutes(10));
+
+            return response()->json($res, 200);
         }
 
         $response = Http::post(config('app.url_machine_learning') . '/get_phishing_url', [
             'url' => base64_encode($url)
         ]);
 
-        return json_decode($response->body());
+        $res = json_decode($response->body());
+        Cache::put($url, $res, now()->addMinutes(10));
+
+        return response()->json($res, 200);
     }
 }
