@@ -485,7 +485,7 @@ feature_names = ['Domain', 'Have_IP', 'Have_At', 'URL_Length', 'URL_Depth',
                  'DNS_Record', 'Web_Traffic', 'Domain_Age', 'Domain_End',
                  'iFrame', 'Mouse_Over', 'Right_Click', 'Web_Forwards']
 
-def get_data():
+def prepareData():
     all_result_phishing = []
 
     f1 = open("data_prepare/legate2/legate_processed.txt", "r")
@@ -512,19 +512,20 @@ def get_data():
     # all_result_legitimate = pd.DataFrame(lines)
     # all_result_legitimate.to_csv('data/new-processed-legate.csv')
 
-def extract_feature(type, index):
+def extractFeaturePhishing(type, index):    
     all_result_phishing = []
     all_result_legitimate = []
 
-    f1 = open("data_prepare/top5000com.txt", "r")
+    f1 = open("data_prepare/phishing2/verified_online.txt", "r")
     index = int(index)
     type = int(type)
     i = index
+    index = int(index/200) * 200
 
     lines = f1.readlines()
-    while ((i-index) < 1000):
+    while ((i-index) < 200):
         try:
-            f1 = open("data_prepare/non-phishing/legate_" + str(int(index/1000)) + ".txt", "a")
+            f1 = open("data_prepare/phishing2/phishing_" + str(int(index/200)) + ".txt", "a")
             result_phishing = featureExtraction(lines[i].replace('\n', ''))
             print(result_phishing, "i = ", i)
             result_phishing.append(type)
@@ -536,15 +537,44 @@ def extract_feature(type, index):
             i += 1
             pass
 
+def extractFeatureLegate(type, index):
+    all_result_phishing = []
+    all_result_legitimate = []
+
+    f1 = open("data_prepare/newLegate.txt", "r")
+    index = int(index)
+    type = int(type)
+    i = index
+    index = int(index/200) * 200
+
+    lines = f1.readlines()
+    while ((i-index) < 200):
+        try:
+            f1 = open("data_prepare/legate2/legate" + str(int(index/200)) + ".txt", "a")
+            result_phishing = featureExtraction(lines[i].replace('\n', ''))
+            print(result_phishing, "i = ", i)
+            result_phishing.append(type)
+            all_result_phishing.append(result_phishing)
+            f1.write(str(result_phishing).replace('[','').replace(']','').replace("'",'') + '\n')
+            f1.close()
+            i += 1
+        except:
+            print('ext')
+            i += 1
+            pass
+
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser(
-        description='This program prints the name of my dogs'
+        description='This program extract features of url'
     )
     parser.add_argument('-t', '-type')
     parser.add_argument('-i', '-index')
     
-    args = parser.parse_args()  
-    extract_feature(args.t, args.i)
+    args = parser.parse_args()
+    if int(args.t) == 1:
+        extractFeaturePhishing(args.t, args.i)
+    else:
+        extractFeatureLegate(args.t, args.i)
 
     # get_data()
