@@ -14,7 +14,43 @@ import utils
 
 def split_data():
     df = pd.read_csv(config.PATH_DATA_ALL)
-    features = ['Subdomain_Level', 'Url_Length', 'Have_At_Sign', 'Have_Tilde_Symbol', 'No_Https', 'Having_IP', 'Domain_In_Subdomains', 'Domain_In_Paths', 'Http_In_Hostname', 'Double_Slash_In_Path', 'Num_Dots', 'Num_Dashes_In_Hostname', 'Num_Underscore', 'Num_Percent', 'Num_Query_Components', 'Num_Ampersand', 'Num_Hash', 'Num_Numeric_Chars', 'Path_Length', 'Query_Length', 'Num_Sensitive_Words', 'Ext_Favicon', 'Redirection', 'Tiny_URL', 'Prefix_Suffix', 'DNS', 'Domain_Age', 'Domain_End', 'Rank_Host', 'Rank_Country', 'Iframe', 'Mouse_Over', 'Right_Click', 'Forwarding']
+    features = [
+        'Domain_Length',
+        'Subdomain_Level',
+        # 'Url_Length',
+        'Have_At_Sign',
+        'Have_Tilde_Symbol',
+        'No_Https',
+        'Having_IP',
+        'Domain_In_Subdomains',
+        'Domain_In_Paths',
+        'Http_In_Hostname',
+        'Double_Slash_In_Path',
+        'Num_Dots',
+        'Num_Dashes_In_Hostname',
+        'Num_Underscore',
+        'Num_Percent',
+        'Num_Query_Components',
+        'Num_Ampersand',
+        'Num_Hash',
+        'Num_Numeric_Chars',
+        # 'Path_Length',
+        # 'Query_Length',
+        'Num_Sensitive_Words',
+        'Ext_Favicon',
+        'Redirection',
+        'Tiny_URL',
+        'Prefix_Suffix',
+        'DNS',
+        'Domain_Age',
+        'Domain_End',
+        'Rank_Host',
+        'Rank_Country',
+        'Iframe',
+        'Mouse_Over',
+        'Right_Click',
+        'Forwarding'
+    ]
     X = df[features]
     y = df['Label']
     X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.7)
@@ -34,7 +70,43 @@ def save_model(model):
 
 def model_training():
     df = pd.read_csv(config.PATH_DATA_ALL)
-    features = ['Subdomain_Level', 'Url_Length', 'Have_At_Sign', 'Have_Tilde_Symbol', 'No_Https', 'Having_IP', 'Domain_In_Subdomains', 'Domain_In_Paths', 'Http_In_Hostname', 'Double_Slash_In_Path', 'Num_Dots', 'Num_Dashes_In_Hostname', 'Num_Underscore', 'Num_Percent', 'Num_Query_Components', 'Num_Ampersand', 'Num_Hash', 'Num_Numeric_Chars', 'Path_Length', 'Query_Length', 'Num_Sensitive_Words', 'Ext_Favicon', 'Redirection', 'Tiny_URL', 'Prefix_Suffix', 'DNS', 'Domain_Age', 'Domain_End', 'Rank_Host', 'Rank_Country', 'Iframe', 'Mouse_Over', 'Right_Click', 'Forwarding']
+    features = [
+        'Domain_Length',
+        'Subdomain_Level',
+        # 'Url_Length',
+        'Have_At_Sign',
+        'Have_Tilde_Symbol',
+        'No_Https',
+        'Having_IP',
+        'Domain_In_Subdomains',
+        'Domain_In_Paths',
+        'Http_In_Hostname',
+        'Double_Slash_In_Path',
+        'Num_Dots',
+        'Num_Dashes_In_Hostname',
+        'Num_Underscore',
+        'Num_Percent',
+        'Num_Query_Components',
+        'Num_Ampersand',
+        'Num_Hash',
+        'Num_Numeric_Chars',
+        # 'Path_Length',
+        # 'Query_Length',
+        'Num_Sensitive_Words',
+        'Ext_Favicon',
+        'Redirection',
+        'Tiny_URL',
+        'Prefix_Suffix',
+        'DNS',
+        'Domain_Age',
+        'Domain_End',
+        'Rank_Host',
+        'Rank_Country',
+        'Iframe',
+        'Mouse_Over',
+        'Right_Click',
+        'Forwarding'
+    ]
     X = df[features]
     y = df['Label']
     X_train, X_test, y_train, y_test = split_data()
