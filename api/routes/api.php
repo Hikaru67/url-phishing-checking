@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/upload-image', 'UploadController@uploadImage');
-Route::post('/delete-image', 'UploadController@deleteImage');
 Route::post('/url-phishing-checking', 'PhishingController@urlPhishingChecking');
+Route::get('urls', 'UrlController@index');
 Route::post('/report', 'UrlController@store');

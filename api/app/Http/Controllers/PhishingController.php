@@ -24,14 +24,11 @@ class PhishingController extends Controller
         $parseUrl = parse_url($url);
         $result = '';
         if (isset($parseUrl['host']) && $parseUrl['host']) {
-            $result = Url::where('url',  $parseUrl['host'])->first();
-            if (!$result) {
-                $result = Url::where('url', 'www.' . $parseUrl['host'] . '%')
-                    ->orWhere('url', 'like', '%www.' . $parseUrl['host'] . '%')
-                    ->orWhere('url', 'like', 'https://' . preg_replace('/^www\./', '', $parseUrl['host']) . '%')
-                    ->orWhere('url', 'like', '%www.' . $parseUrl['host'] . '%')
-                    ->orderBy('url')->first();
-            }
+            $result = Url::where('url', 'like', $parseUrl['host'])
+                ->orWhere('url', 'like', '%www.' . $parseUrl['host'] . '%')
+                ->orWhere('url', 'like', 'https://' . preg_replace('/^www\./', '', $parseUrl['host']) . '%')
+                ->orWhere('url', 'like', 'http://' . preg_replace('/^www\./', '', $parseUrl['host']) . '%')
+                ->orderBy('url')->first();
             if (!$result) {
                 $result = Url::where('url', 'like', '%www.' . $parseUrl['host'] . '%')->first();
             }
