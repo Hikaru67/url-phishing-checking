@@ -8,13 +8,16 @@ import pandas as pd
 import re
 import favicon
 
-# 1.Domain of the URL (Domain) 
+# Domain of the URL (Domain) 
 #scheme='https', netloc='www.google.com', path='/search', params='', query='q=hostname&sxsrf=', fragment='imgrc=b5k8yyIPXWAtPM')
 def getDomain(url):
   domain = urlparse(url).netloc
   if re.match(r"^www.",domain):
     domain = domain.replace("www.","")
   return domain
+
+def domainLength(url):
+    return len(urlparse(url).netloc)
 
 # 1. Number of character '.' in URL
 def numDots(url):
@@ -33,11 +36,11 @@ def subdomainLevel(url):
     except:
         return 0
 
-# 4.Finding the length of URL and categorizing (URL_Length)
+# Finding the length of URL and categorizing (URL_Length)
 def urlLength(url):
     return len(url)
 
-# 3.Gives number of '/' in URL (URL_Depth)
+# Gives number of '/' in URL (URL_Depth)
 def getDepth(url):
     try:
         s = urlparse(url).path.split('/')
@@ -49,21 +52,21 @@ def getDepth(url):
     except:
         return 0
 
-# 1. Number of character '-' in URL
+# Number of character '-' in URL
 def numDashes(url):
     try:
         return url.count('-')
     except:
         return 0
 
-# 1. Number of character '-' in URL
+# Number of character '-' in URL
 def numDashesInHostname(url):
     try:
         return urlparse(url).netloc.count('-')
     except:
         return 0
 
-# 3.Checks the presence of @ in URL (Have_At)
+# Checks the presence of @ in URL (Have_At)
 def haveAtSign(url):
     if "@" in url:
         at = 1
@@ -125,7 +128,7 @@ def noHttps(url):
     except:
         return 1
 
-# 2.Checks for IP address in URL (Have_IP)
+# Checks for IP address in URL (Have_IP)
 def havingIP(url):
     try:
         ipaddress.ip_address(urlparse(url).netloc)
@@ -219,14 +222,7 @@ def extFavicon(url):
 # def FrequentDomainNameMismatch
 # def FakeLinkInStatusBar
 
-"""#### **3.1.6. Redirection "//" in URL**
-
-Checks the presence of "//" in the URL. The existence of “//” within the URL path means that the user will be redirected to another website. The location of the “//” in URL is computed. We find that if the URL starts with “HTTP”, that means the “//” should appear in the sixth position. However, if the URL employs “HTTPS” then the “//” should appear in seventh position.
-
-If the "//" is anywhere in the URL apart from after the protocal, thee value assigned to this feature is 1 (phishing) or else 0 (legitimate).
-"""
-
-# 6.Checking for redirection '//' in the url (Redirection)
+# Checking for redirection '//' in the url (Redirection)
 def redirection(url):
     pos = url.rfind('//')
     if pos > 6:
@@ -248,7 +244,7 @@ shortening_services = r"bit\.ly|goo\.gl|shorte\.st|go2l\.ink|x\.co|ow\.ly|t\.co|
                       r"tr\.im|link\.zip\.net"
 
 
-# 8. Checking for Shortening Services in URL (Tiny_URL)
+# Checking for Shortening Services in URL (Tiny_URL)
 def tinyURL(url):
     match = re.search(shortening_services, url)
     if match:
@@ -256,14 +252,13 @@ def tinyURL(url):
     else:
         return 0
 
-# 9.Checking for Prefix or Suffix Separated by (-) in the Domain (Prefix/Suffix)
+# Checking for Prefix or Suffix Separated by (-) in the Domain (Prefix/Suffix)
 def prefixSuffix(url):
     if '-' in urlparse(url).netloc:
         return 1  # phishing
     else:
         return 0  # legitimate
 
-# !pip install python-whois
 
 # importing required packages for this section
 import re
@@ -273,26 +268,8 @@ import urllib
 import urllib.request
 from datetime import datetime
 
-# 11.DNS Record availability (DNS_Record)
-# obtained in the featureExtraction function itself
 
-
-# # 12.Web traffic (Web_Traffic)
-# def web_traffic(url):
-#     try:
-#         # Filling the whitespaces in the URL if any
-#         url = urllib.parse.quote(url)
-#         rank = \
-#         BeautifulSoup(urllib.request.urlopen("https://data.alexa.com/data?cli=10&dat=s&url=" + url).read(), "xml").find("REACH")['RANK']
-#         rank = int(rank)
-#     except TypeError:
-#         return 1
-#     if rank > 1000000:
-#         return 1
-#     else:
-#         return 0
-
-# 13.Survival time of domain: The difference between termination time and creation time (Domain_Age)
+# Survival time of domain: The difference between termination time and creation time (Domain_Age)
 def domainAge(domain_name):
     creation_date = domain_name.creation_date
     expiration_date = domain_name.expiration_date
@@ -314,7 +291,7 @@ def domainAge(domain_name):
             age = 0
     return age
 
-# 14.End time of domain: The difference between termination time and current time (Domain_End)
+# End time of domain: The difference between termination time and current time (Domain_End)
 def domainEnd(domain_name):
     expiration_date = domain_name.expiration_date
     if isinstance(expiration_date, str):
@@ -366,7 +343,7 @@ def rankCountry(url):
 # importing required packages for this section
 import requests
 
-# 15. IFrame Redirection (iFrame)
+# IFrame Redirection (iFrame)
 def iframe(response):
     if response == "":
         return 1
@@ -376,7 +353,7 @@ def iframe(response):
         else:
             return 0
 
-# 16.Checks the effect of mouse over on status bar (Mouse_Over)
+# Checks the effect of mouse over on status bar (Mouse_Over)
 def mouseOver(response):
     if response == "":
         return 1
@@ -386,7 +363,7 @@ def mouseOver(response):
         else:
             return 0
 
-# 17.Checks the status of the right click attribute (Right_Click)
+# Checks the status of the right click attribute (Right_Click)
 def rightClick(response):
     if response == "":
         return 1
@@ -396,7 +373,7 @@ def rightClick(response):
         else:
             return 0
 
-# 18.Checks the number of forwardings (Web_Forwards)
+# Checks the number of forwardings (Web_Forwards)
 def forwarding(response):
     if response == "":
         return 1
@@ -406,15 +383,23 @@ def forwarding(response):
         else:
             return 1
 
+def featureExtraction2(url):
+    features = []
+    # Address bar based features (10)
+    features.append(getDomain(url))
+
+    features.append(domainLength(url))
+    return features
 
 # Function to extract features
 def featureExtraction(url):
     features = []
     # Address bar based features (10)
     features.append(getDomain(url))
-    
+
+    features.append(domainLength(url))
     features.append(subdomainLevel(url))
-    features.append(urlLength(url))
+    # features.append(urlLength(url))
     # features.append(getDepth(url))
     features.append(haveAtSign(url))
     features.append(haveTildeSymbol(url))
@@ -433,8 +418,8 @@ def featureExtraction(url):
     features.append(numAmpersand(url))
     features.append(numHash(url))
     features.append(numNumericChars(url))
-    features.append(pathLength(url))
-    features.append(queryLength(url))
+    # features.append(pathLength(url))
+    # features.append(queryLength(url))
     features.append(numSensitiveWords(url))
 
     features.append(extFavicon(url))
@@ -482,6 +467,7 @@ def featureExtraction(url):
 # converting the list to dataframe
 feature_names = [
     'Domain',
+    'Domain_Length',
     'Subdomain_Level',
     'Url_Length',
     'Url_Depth',
@@ -519,33 +505,6 @@ feature_names = [
     'Forwarding'
 ]
 
-def prepareData():
-    all_result_phishing = []
-
-    f1 = open("data_prepare/legate2/legate_processed.txt", "r")
-    lines = f1.readlines()
-    for i in range(len(lines)):
-        lines[i] = lines[i].replace('\n','').split(', ')
-        for j in range(len(lines[i])):
-            if j>0:
-                lines[i][j] = int(lines[i][j])
-    f1.close()
-
-    f2 = open("data_prepare/phishing/phishing_processed.txt", "r")
-    legates = f2.readlines()
-    for i in range(len(legates)):
-        legates[i] = legates[i].replace('\n','').split(', ')
-        for j in range(len(legates[i])):
-            if j>0:
-                legates[i][j] = int(legates[i][j])
-        lines.append(legates[i])
-    f2.close()
-    all_result_phishing = pd.DataFrame(lines)
-    all_result_phishing.to_csv('data/new-processed3.csv')
-
-    # all_result_legitimate = pd.DataFrame(lines)
-    # all_result_legitimate.to_csv('data/new-processed-legate.csv')
-
 def extractFeaturePhishing(type, index, limit = 1000):    
     all_result_phishing = []
     all_result_legitimate = []
@@ -560,7 +519,7 @@ def extractFeaturePhishing(type, index, limit = 1000):
     while ((i-index) < limit):
         try:
             f1 = open("data_prepare/phishing2/phishing_" + str(int(index/limit)) + ".txt", "a")
-            result_phishing = featureExtraction(lines[i].replace('\n', ''))
+            result_phishing = featureExtraction2(lines[i].replace('\n', ''))
             print(result_phishing, "i = ", i)
             result_phishing.append(type)
             all_result_phishing.append(result_phishing)
@@ -585,7 +544,7 @@ def extractFeatureLegate(type, index, limit = 1000):
     while ((i-index) < limit):
         try:
             f1 = open("data_prepare/legate2/legate_" + str(int(index/limit)) + ".txt", "a")
-            result_phishing = featureExtraction(lines[i].replace('\n', ''))
+            result_phishing = featureExtraction2(lines[i].replace('\n', ''))
             print(result_phishing, "i = ", i)
             result_phishing.append(type)
             all_result_phishing.append(result_phishing)
