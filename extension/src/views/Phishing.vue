@@ -19,8 +19,8 @@
         </div>
         <div class="text-center mb-2" :class="label ? 'status' : 'status-alert'">{{ getStatus }}</div>
       </div>
-      <button v-if="features.length" type="button" class="btn btn-success mb-2">Xem chi tiết</button>
-      <button type="button" class="btn btn-report">Báo cáo</button>
+      <button :disabled="!features.length > 0" type="button" class="btn btn-success mb-2">Xem chi tiết</button>
+      <button type="button" class="btn btn-report" @click="showBlockList">Báo cáo</button>
     </div>
   </div>
 </template>
@@ -38,15 +38,17 @@ export default {
   data() {
     return {
       loading: false,
-      url: 'https://garena-sukien-skinsss.com/',
+      url: '',
       label: 0,
       features: [],
       percent: 86,
+      blockList: []
     }
   },
 
   computed: {
     getDomain() {
+      if (!this.url) { return '' }
       const url =  new URL(this.url)
       return url.origin
     },
@@ -69,6 +71,7 @@ export default {
   },
 
   created() {
+    this.getBlockList()
     this.getUrl()
   },
 
@@ -86,6 +89,7 @@ export default {
           args: [],
           func: () => {
             const url = window.location.href
+            console.log('url :>> ', url)
             return url ? url : ''
           }
         }, (result) => {
@@ -108,6 +112,7 @@ export default {
       if (data.label === LABEL.good) {
         this.label = 1
       } else {
+        this.setBlockList(this.url)
         this.label = 0
       }
       this.percent = Math.round(data.percent)
@@ -115,8 +120,22 @@ export default {
       this.loading = false
     },
 
-    test() {
-      this.url = 'https://shopeefood.vn/ha-noi/happy-lunch-vu-huu?smtt=0.0.9'
+    async getBlockList() {
+      const local = await chrome.storage.local.get(["enabled", "blocked", "resolution"])
+      console.log('local :>> ', local)
+      this.blockList = local.blocked
+    },
+
+    async setBlockList(url) {
+      if (this.blockList.find(bl => bl === url)) { return }
+
+      this.blockList.push(url)
+      await chrome.storage.local.set({ blocked: this.blockList })
+      this.getBlockList()
+    },
+
+    showBlockList() {
+      console.log('this.blockList :>> ', this.blockList)
     }
   }
 }
