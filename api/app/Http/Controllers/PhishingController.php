@@ -6,9 +6,15 @@ use App\Models\Url;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use App\Repositories\UrlRepository;
 
 class PhishingController extends Controller
 {
+    public function __construct(UrlRepository $urlRepository)
+    {
+        $this->urlRepository = $urlRepository;
+    }
+
     public function urlPhishingChecking(Request $request)
     {
         $request->validate([
@@ -21,31 +27,14 @@ class PhishingController extends Controller
 
             return response()->json($cacheValue, 200);
         };
-        $parseUrl = parse_url($url);
-        $result = '';
-        if (isset($parseUrl['host']) && $parseUrl['host']) {
-            $result = Url::where('url', 'like', $parseUrl['host'])
-                ->orWhere('url', 'like', '%www.' . $parseUrl['host'] . '%')
-                ->orWhere('url', 'like', 'https://' . preg_replace('/^www\./', '', $parseUrl['host']) . '%')
-                ->orWhere('url', 'like', 'http://' . preg_replace('/^www\./', '', $parseUrl['host']) . '%')
-                ->orderBy('url')->first();
-            if (!$result) {
-                $result = Url::where('url', 'like', '%www.' . $parseUrl['host'] . '%')->first();
-            }
-        }
-        if (!$result) {
-            $result = Url::where('url', 'like', $url . '%')->first();
-            if ($result && !preg_match('/^(http|https)/u', $url)) {
-                $url = 'https://' + $url;
-                $result = Url::where('url', 'like', $url . '%')->first();
-            }
-        }
+        $result = $this->urlRepository->filterUrl($url);
 
         if ($result ) {
             $res = [
                 'label' => $result->type ? 'bad' : 'good',
                 'type' => 'success',
                 'percent' => 98,
+                'is_filter' => true,
                 'features' => []
             ];
             Cache::put($url, $res, now()->addMinutes(10));
@@ -53,7 +42,7 @@ class PhishingController extends Controller
             return response()->json($res, 200);
         }
 
-        $response = Http::post(config('app.url_machine_learning') . '/get_phishing_url', [
+        $response = Http::post(config('app.url_machine_learning') . '/url-phishing-checking', [
             'url' => base64_encode($url)
         ]);
 

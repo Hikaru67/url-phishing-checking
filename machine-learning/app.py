@@ -6,43 +6,27 @@ import config
 import base64
 
 import URLFeatureExtraction
-import phishing_url
+import MachineLearning
 
-# from flask_mysqldb import MySQL
  
 app = Flask(__name__)
  
-# app.config['MYSQL_HOST'] = 'localhost'
-# app.config['MYSQL_USER'] = 'x3english'
-# app.config['MYSQL_PASSWORD'] = 'x3english'
-# app.config['MYSQL_DB'] = 'phishing'
- 
-# mysql = MySQL(app)
-
-@app.route('/get_phishing_url', methods=['POST'])
+@app.route('/url-phishing-checking', methods=['POST'])
 @cross_origin()
-def get_phishing_url():
+def urlPhishingChecking():
     data = request.data.decode()
     try:
         res = ast.literal_eval(data)
         url = list(res.values())[0]
         if isBase64(url):
             url = base64.b64decode(url).decode('utf-8')
-        # if url[0:8] == "https://":
-        #     url = 'https:/' + url[8:]
-        # elif url[0:7] == "http://":
-        #     url = 'http:/' + url[7:]
     except:
         return Response("Something went wrong!")
 
     input_data = URLFeatureExtraction.featureExtraction(url)
     input_data = input_data[slice(1, len(input_data))]
-    result = phishing_url.get_phishing_url(input_data)
+    result = MachineLearning.urlPhishingChecking(input_data)
     return jsonify(result)
-
-@app.route('/', methods=['GET'])
-def hello():
-    return "<h1 style='color:blue'>Hello There!</h1>"
 
 def isBase64(s):
     try:
@@ -50,20 +34,9 @@ def isBase64(s):
     except Exception:
         return False
 
-# @app.route('/', methods=['GET'])
-# @cross_origin()
-# def get_phishing_url():
-#     data = request.data.decode()
-#     try:
-#         res = ast.literal_eval(data)[i]
-#         url = list(res.values())[0]
-#     except:
-#         return Response("Something went wrong!")
-
-#     input_data = URLFeatureExtraction.featureExtraction(url)
-#     result = phishing_url.get_phishing_url(input_data)
-#     return jsonify(result)
-
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
 
+@app.route('/', methods=['GET'])
+def hello():
+    return "<h1 style='color:blue'>Hello There!</h1>"

@@ -12,7 +12,7 @@ import config
 import utils
 
 
-def split_data():
+def splitData():
     df = pd.read_csv(config.PATH_DATA_ALL)
     features = [
         'Domain_Length',
@@ -62,68 +62,26 @@ def split_data():
 
     return X_train, X_test, y_train, y_test
 
-
 def save_model(model):
     utils.mkdir(f'{config.PATH_SAVE_MODEL}')
     utils.save(model, f'{config.PATH_SAVE_MODEL}/model.pkl')
 
-
-def model_training():
+def trainModel():
     df = pd.read_csv(config.PATH_DATA_ALL)
-    features = [
-        'Domain_Length',
-        'Subdomain_Level',
-        # 'Url_Length',
-        'Have_At_Sign',
-        'Have_Tilde_Symbol',
-        'No_Https',
-        'Having_IP',
-        'Domain_In_Subdomains',
-        'Domain_In_Paths',
-        'Http_In_Hostname',
-        'Double_Slash_In_Path',
-        'Num_Dots',
-        'Num_Dashes_In_Hostname',
-        'Num_Underscore',
-        'Num_Percent',
-        'Num_Query_Components',
-        'Num_Ampersand',
-        'Num_Hash',
-        'Num_Numeric_Chars',
-        # 'Path_Length',
-        # 'Query_Length',
-        'Num_Sensitive_Words',
-        'Ext_Favicon',
-        'Redirection',
-        'Tiny_URL',
-        'Prefix_Suffix',
-        'DNS',
-        'Domain_Age',
-        'Domain_End',
-        'Rank_Host',
-        'Rank_Country',
-        'Iframe',
-        'Mouse_Over',
-        'Right_Click',
-        'Forwarding'
-    ]
+    features = ['Domain_Length','Subdomain_Level','Have_At_Sign','Have_Tilde_Symbol','No_Https','Having_IP','Domain_In_Subdomains','Domain_In_Paths','Http_In_Hostname','Double_Slash_In_Path','Num_Dots','Num_Dashes_In_Hostname','Num_Underscore','Num_Percent','Num_Query_Components','Num_Ampersand','Num_Hash','Num_Numeric_Chars','Num_Sensitive_Words','Ext_Favicon','Redirection','Tiny_URL','Prefix_Suffix','DNS','Domain_Age','Domain_End','Rank_Host','Rank_Country','Iframe','Mouse_Over','Right_Click','Forwarding']
     X = df[features]
     y = df['Label']
-    X_train, X_test, y_train, y_test = split_data()
     model = CatBoostClassifier(learning_rate = 0.1, depth = 8, rsm = 1)
-    # model = GradientBoostingClassifier(n_estimators=1000, max_depth=7)
     model.fit(X, y)
     save_model(model)
 
-
-def load_model():
+def loadModel():
     model = utils.load(f'{config.PATH_SAVE_MODEL}/model.pkl')
     return model
 
-
 def predict():
-    model = load_model()
-    X_train, X_test, y_train, y_test = split_data()
+    model = loadModel()
+    X_train, X_test, y_train, y_test = splitData()
     y_pred = model.predict(X_test)
 
     acc = accuracy_score(y_test, y_pred)
@@ -136,26 +94,23 @@ def predict():
     print("precision of model is: ", precision)
     print("f1_score of model is: ", f1)
 
-
-def phishing_url():
-    model = load_model()
+def getModel():
+    model = loadModel()
     if model is None:
 
-        model_training()
+        trainModel()
     else:
         model = model
     return model
 
-
-def check_phishing(data):
-    model = phishing_url()
+def getResult(data):
+    model = getModel()
     result_1 = model.predict(data)
     result_2 = model.predict_proba(data)
     return result_1, result_2
 
-
-def get_phishing_url(data):
-    result_1, result_2 = check_phishing(data)
+def urlPhishingChecking(data):
+    result_1, result_2 = getResult(data)
     if result_1 == 1:
         label = 'bad'
     else:
@@ -177,8 +132,7 @@ def get_phishing_url(data):
     })
     return result
 
-
 if __name__ == '__main__':
     # data = [0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0]
-    # print(get_phishing_url(data))
-    model_training()
+    # print(urlPhishingChecking(data))
+    trainModel()
