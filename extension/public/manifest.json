@@ -9,7 +9,9 @@
   },
   "permissions": [
     "tabs",
-    "storage"
+    "storage",
+    "scripting",
+    "activeTab"
   ],
   "options_page": "options.html",
   "background": {

@@ -19,7 +19,7 @@
         </div>
         <div class="text-center mb-2" :class="label ? 'status' : 'status-alert'">{{ getStatus }}</div>
       </div>
-      <button :disabled="!features.length > 0" type="button" class="btn btn-success mb-2">Xem chi tiết</button>
+      <button :disabled="!features.length > 0" type="button" class="btn btn-success mb-2" @click="showBlockList">Xem chi tiết</button>
       <button type="button" class="btn btn-report" @click="showBlockList">Báo cáo</button>
     </div>
   </div>
@@ -38,10 +38,10 @@ export default {
   data() {
     return {
       loading: false,
-      url: '',
-      label: 0,
+      url: 'https://chrome.google.com/webstore/detail/url-phishing-checking/dpdaljmpldgkeejblgjfpjpidaohpblf?hl=vi&authuser=0',
+      label: 1,
       features: [],
-      percent: 86,
+      percent: 0,
       blockList: []
     }
   },
@@ -73,6 +73,7 @@ export default {
   created() {
     this.getBlockList()
     this.getUrl()
+    this.scanUrl()
   },
 
   // mounted() {
@@ -89,7 +90,6 @@ export default {
           args: [],
           func: () => {
             const url = window.location.href
-            console.log('url :>> ', url)
             return url ? url : ''
           }
         }, (result) => {
@@ -121,13 +121,13 @@ export default {
     },
 
     async getBlockList() {
-      const local = await chrome.storage.local.get(["enabled", "blocked", "resolution"])
+      const local = await chrome.storage.local.get("blocked")
       console.log('local :>> ', local)
       this.blockList = local.blocked
     },
 
     async setBlockList(url) {
-      if (this.blockList.find(bl => bl === url)) { return }
+      if (this.blockList.length && this.blockList.find(bl => bl === url)) { return }
 
       this.blockList.push(url)
       await chrome.storage.local.set({ blocked: this.blockList })
@@ -135,6 +135,7 @@ export default {
     },
 
     showBlockList() {
+      this.getUrl()
       console.log('this.blockList :>> ', this.blockList)
     }
   }
