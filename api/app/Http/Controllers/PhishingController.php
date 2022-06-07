@@ -29,13 +29,14 @@ class PhishingController extends Controller
         };
         $result = $this->urlRepository->filterUrl($url);
 
-        if ($result ) {
+        if ($result) {
             $res = [
-                'label' => $result->type ? 'bad' : 'good',
+                'label' => $result->type,
                 'type' => 'success',
                 'percent' => 98,
                 'is_filtered' => 1,
-                'features' => []
+                'features' => [],
+                'suggestion' => $result->type ? 'bad' : 'good'
             ];
             Cache::put($url, $res, now()->addMinutes(10));
 

@@ -112,9 +112,9 @@ def getResult(data):
 def urlPhishingChecking(data):
     result_1, result_2 = getResult(data)
     if result_1 == 1:
-        label = 'bad'
+        label = 1
     else:
-        label = 'good'
+        label = 0
     print(result_2)
     flag = np.argmax(result_2)
     if flag == 0:

@@ -36,12 +36,14 @@ enabledToggle.addEventListener("change", (event) => {
 
 window.addEventListener("DOMContentLoaded", () => {
   chrome.storage.local.get(["enabled", "blocked", "resolution"], function (local) {
-    const { enabled, blocked, resolution } = local;
+    let { enabled, blocked, resolution } = local;
     if (!Array.isArray(blocked)) {
       return;
     }
 
     // blocked
+    console.log('blocked', blocked)
+    blocked = blocked.map(bl => bl.url)
     var value = blocked.join("\r\n"); // display every blocked in new line
     blockedList.value = value;
 
