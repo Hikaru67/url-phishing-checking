@@ -112,7 +112,7 @@ export default {
       if (data.label === LABEL.good) {
         this.label = 1
       } else {
-        this.setBlockList(this.url)
+        await this.setBlockList(this.url)
         this.label = 0
       }
       this.percent = Math.round(data.percent)
@@ -127,6 +127,7 @@ export default {
     },
 
     async setBlockList(url) {
+      if (this.label) { return }
       if (this.blockList.length && this.blockList.find(bl => bl === url)) { return }
 
       this.blockList.push(url)
