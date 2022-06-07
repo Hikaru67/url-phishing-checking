@@ -118,7 +118,8 @@ export default {
       this.isFiltered = !!data.is_filtered
       this.label = data.label
       if (data.label) {
-        await this.setBlockList(data)
+        console.log('set block')
+        await this.setBlockList(this.url, data)
       }
       this.percent = Math.round(data.percent)
       this.features = data.features
@@ -130,13 +131,14 @@ export default {
       this.blockList = local.blocked
     },
 
-    async setBlockList(data) {
-      if (!data.label || !data.url) { return } // legate
-      if (this.blockList.length && this.blockList.find(bl => bl.url === data.url)) { return }
+    async setBlockList(url, data) {
+      console.log('setBlockList => data', data)
+      if (!data.label || !url) { return } // legate
+      if (this.blockList.length && this.blockList.find(bl => bl.url === url)) { return }
 
       this.blockList.push({
         url,
-        isFiltered
+        isFiltered: data.is_filtered
       })
       await chrome.storage.local.set({ blocked: this.blockList })
       this.getBlockList()
