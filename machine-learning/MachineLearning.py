@@ -128,7 +128,7 @@ def urlPhishingChecking(data):
         'label': label,
         'suggestion': config.MODEL_SUGGESTIONS[label],
         'percent': round(score, 2),
-        'is_filter': false,
+        'is_filtered': 0,
         'features': data
     })
     return result

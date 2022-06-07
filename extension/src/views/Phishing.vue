@@ -42,7 +42,8 @@ export default {
       label: 0,
       features: [],
       percent: 86,
-      blockList: []
+      blockList: [],
+      isFiltered: false
     }
   },
 
@@ -60,7 +61,7 @@ export default {
     },
 
     getStatus() {
-      return this.label ? 'Website này có thể an toàn.' : 'Website này không an toàn.'
+      return this.label ? 'Website này có thể an toàn.' : 'Website này không an toàn.' + this.isFiltered ? '(Kết quả bộ lọc)' : '(Kết quả học máy)'
     }
   },
 
@@ -108,11 +109,12 @@ export default {
       const { data } = await axios.post(URL_MC, {
         url: this.url
       })
-      console.log('🚀 ~ data', data)
+      this.clearData()
+      this.isFiltered = !!data.is_filtered
       if (data.label === LABEL.good) {
         this.label = 1
       } else {
-        this.setBlockList(this.url)
+        this.setBlockList(this.url, this.isFiltered)
         this.label = 0
       }
       this.percent = Math.round(data.percent)
@@ -126,16 +128,26 @@ export default {
       this.blockList = local.blocked
     },
 
-    async setBlockList(url) {
-      if (this.blockList.find(bl => bl === url)) { return }
+    async setBlockList(url, isFiltered) {
+      if (this.blockList.find(bl => bl.url === url)) { return }
 
-      this.blockList.push(url)
+      this.blockList.push({
+        url,
+        isFiltered
+      })
       await chrome.storage.local.set({ blocked: this.blockList })
       this.getBlockList()
     },
 
     showBlockList() {
       console.log('this.blockList :>> ', this.blockList)
+    },
+
+    clearData() {
+      this.label = null
+      this.features = []
+      this.percent = 0
+      this.isFiltered = null
     }
   }
 }

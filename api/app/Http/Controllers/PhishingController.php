@@ -34,7 +34,7 @@ class PhishingController extends Controller
                 'label' => $result->type ? 'bad' : 'good',
                 'type' => 'success',
                 'percent' => 98,
-                'is_filter' => true,
+                'is_filtered' => 1,
                 'features' => []
             ];
             Cache::put($url, $res, now()->addMinutes(10));
