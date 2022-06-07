@@ -62,7 +62,7 @@ def splitData():
 
     return X_train, X_test, y_train, y_test
 
-def save_model(model):
+def saveModel(model):
     utils.mkdir(f'{config.PATH_SAVE_MODEL}')
     utils.save(model, f'{config.PATH_SAVE_MODEL}/model.pkl')
 
@@ -73,7 +73,7 @@ def trainModel():
     y = df['Label']
     model = CatBoostClassifier(learning_rate = 0.1, depth = 8, rsm = 1)
     model.fit(X, y)
-    save_model(model)
+    saveModel(model)
 
 def loadModel():
     model = utils.load(f'{config.PATH_SAVE_MODEL}/model.pkl')
@@ -128,6 +128,7 @@ def urlPhishingChecking(data):
         'label': label,
         'suggestion': config.MODEL_SUGGESTIONS[label],
         'percent': round(score, 2),
+        'is_filtered': 0,
         'features': data
     })
     return result

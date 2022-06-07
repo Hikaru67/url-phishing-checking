@@ -10,8 +10,12 @@
   "permissions": [
     "tabs",
     "storage",
-    "scripting",
-    "activeTab"
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
   ],
   "options_page": "options.html",
   "background": {
