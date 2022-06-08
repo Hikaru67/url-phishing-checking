@@ -52,7 +52,7 @@ export default {
 
   computed: {
     getDomain() {
-      if (!this.url) { return '' }
+      if (!this.url) { return '...' }
       const url =  new URL(this.url)
       return url.origin
     },

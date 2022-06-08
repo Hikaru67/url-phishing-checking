@@ -48,18 +48,24 @@ const normalizeUrl = (url) => [url]
 // ["youtube.com", "!music.youtube.com"] => [{ path: "music.youtube.com", type: "allow" }, { path: "youtube.com", type: "block" }]
 // ["https://youtube.com/", "!https://music.youtube.com/"] => [{ path: "music.youtube.com", type: "allow" }, { path: "youtube.com", type: "block" }]
 const getRules = (blocked) => {
-  const allowList = blocked
-    .filter((item) => item.startsWith("!"))
-    .map((item) => normalizeUrl(item.substring(1)));
+  let rules = blocked.map(item => {
+    return {
+      isFiltered: item.isFiltered,
+      url: normalizeUrl(item.url)
+    }
+  }).sort((a, b) => b.url.length - a.url.length)
+  // const allowList = blocked
+  //   .filter((item) => item.startsWith("!"))
+  //   .map((item) => normalizeUrl(item.substring(1)));
 
-  const blockList = blocked
-    .filter((item) => !item.startsWith("!"))
-    .map(normalizeUrl);
+  // const blockList = blocked
+  //   .filter((item) => !item.url.startsWith("!"))
+  //   .map(normalizeUrl);
 
-  const rules = [
-    ...allowList.map((path) => ({ path, type: "allow" })),
-    ...blockList.map((path) => ({ path, type: "block" })),
-  ].sort((a, b) => b.path.length - a.path.length); // order the rules by their specificity; the longer the rule, the more specific
+  //  rules = [
+  //   ...allowList.map((path) => ({ path, type: "allow" })),
+  //   ...blockList.map((path) => ({ path, type: "block" })),
+  // ].sort((a, b) => b.path.length - a.path.length); // order the rules by their specificity; the longer the rule, the more specific
 
   return rules;
 };
@@ -72,27 +78,32 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo) {
   }
 
   const normalizedUrl = normalizeUrl(url);
+  console.log('normalizedUrl', normalizedUrl)
 
   chrome.storage.local.get(["enabled", "blocked", "resolution"], function (local) {
-    const { enabled, blocked } = local;
+    let { enabled, blocked } = local;
     if (!enabled || !Array.isArray(blocked) || blocked.length === 0) {
       return;
     }
-
-    // const rules = getRules(blocked);
+    console.log('blocked', blocked)
+    
+    const rules = getRules(blocked);
+    console.log('rules', rules)
     // const foundRule = rules.find((rule) => normalizedUrl.startsWith(rule.path) || normalizedUrl.endsWith(rule.path));
-    // if (!foundRule || foundRule.type === "allow") {
-    //   return;
-    // }
+    const foundRule = rules.find((bl => normalizedUrl.startsWith(bl.url) || normalizedUrl.endsWith(bl.url)));
+    console.log('foundRule', foundRule)
+    if (!foundRule) {
+      return;
+    }
 
     chrome.tabs.update(tabId, { url: `${chrome.runtime.getURL("blocked.html")}?url=${url}` });
-    switch (resolution) {
-      case CLOSE_TAB:
-        chrome.tabs.remove(tabId);
-        break;
-      case SHOW_BLOCKED_INFO_PAGE:
-      chrome.tabs.update(tabId, { url: `${chrome.runtime.getURL("blocked.html")}?url=${url}` });
-      break;
-    }
+    // switch (resolution) {
+    //   case CLOSE_TAB:
+    //     chrome.tabs.remove(tabId);
+    //     break;
+    //   case SHOW_BLOCKED_INFO_PAGE:
+    //   chrome.tabs.update(tabId, { url: `${chrome.runtime.getURL("blocked.html")}?url=${url}` });
+    //   break;
+    // }
   });
 });
