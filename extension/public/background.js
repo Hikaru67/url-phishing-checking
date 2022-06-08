@@ -17,7 +17,6 @@ chrome.runtime.onInstalled.addListener(function () {
     }
 
     if (!Array.isArray(local.blocked)) {
-      let list = []
       chrome.storage.local.set({ blocked: [] });
     }
 
