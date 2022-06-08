@@ -17,11 +17,7 @@ chrome.runtime.onInstalled.addListener(function () {
     }
 
     if (!Array.isArray(local.blocked)) {
-      fetch('http://127.0.0.1:8000/api/urls?type=1').then(data => {
-        console.log(data);
-        console.log(data.body);
-      })
-
+      let list = []
       chrome.storage.local.set({ blocked: [] });
     }
 
@@ -46,7 +42,11 @@ const normalizeUrl = (url) => [url]
   .pop();
 
 const getHostname = (url) => {
-  return new URL(url).host
+  try {
+    return new URL(url).hostname
+  } catch (error) {
+    return url
+  }
 }
 
 // ["youtube.com", "!music.youtube.com"] => [{ path: "music.youtube.com", type: "allow" }, { path: "youtube.com", type: "block" }]
@@ -58,7 +58,7 @@ const getRules = (blocked) => {
       url: getHostname(item.url),
       skip: item.skip ? 1 : 0
     }
-  }).sort((a, b) => b.url.length - a.url.length)
+  })
   // const allowList = blocked
   //   .filter((item) => item.startsWith("!"))
   //   .map((item) => normalizeUrl(item.substring(1)));
@@ -83,14 +83,23 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo) {
 
   const hostname = getHostname(url);
 
-  chrome.storage.local.get(["enabled", "blocked", "resolution"], function (local) {
+  chrome.storage.local.get(["enabled", "blocked", "resolution"], function async (local) {
     let { enabled, blocked } = local;
     if (!enabled || !Array.isArray(blocked) || blocked.length === 0) {
       return;
     }
     
-    const rules = getRules(blocked);
     const foundRule = blocked.find((bl => getHostname(bl.url) === hostname));
+    console.log('🚀 ~ u', u)
+    if (!foundRule) {
+      fetch('http://127.0.0.1:8000/api/url-phishing-checking', {
+        method: 'POST',
+        body: { url: url }
+      }).then(response => response.json())
+        .then(data => {
+          console.log(data.data)
+        })
+    }
     if (!foundRule || foundRule.skip) {
       return;
     }
@@ -98,3 +107,24 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo) {
     chrome.tabs.update(tabId, { url: `${chrome.runtime.getURL("blocked.html")}?url=${url}&is-filtered=${foundRule.isFiltered}` });
   });
 });
+
+const phishingChecking = async (url) => {
+  const response = await fetch('http://127.0.0.1:8000/api/url-phishing-checking', {
+    method: 'POST',
+    body: { url: url }
+  })
+  console.log('🚀 ~ response', response)
+}
+        // .then(response => response.json())
+        // .then(data => {
+        //   list = data.data
+        //   list = list.map(item => {
+        //     if (item.url[item.url.length - 1] === '\n') {
+        //       item.url = item.url.substring(0, item.url.length - 1)
+        //     }
+        //     return {
+        //       url: item.url,
+        //       isFiltered: 1
+        //     }
+        //   })
+        // })
