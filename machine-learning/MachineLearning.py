@@ -109,7 +109,7 @@ def getResult(data):
     result_2 = model.predict_proba(data)
     return result_1, result_2
 
-def urlPhishingChecking(data):
+def urlPhishingChecking(data, url):
     result_1, result_2 = getResult(data)
     if result_1 == 1:
         label = 1
@@ -125,6 +125,7 @@ def urlPhishingChecking(data):
     result = {}
 
     result.update({
+        'url': url,
         'label': label,
         'suggestion': config.MODEL_SUGGESTIONS[label],
         'percent': round(score, 2),

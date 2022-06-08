@@ -31,6 +31,7 @@ class PhishingController extends Controller
 
         if ($result) {
             $res = [
+                'url' => $url,
                 'label' => $result->type,
                 'type' => 'success',
                 'percent' => 98,

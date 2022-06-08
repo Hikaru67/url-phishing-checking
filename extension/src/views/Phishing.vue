@@ -99,12 +99,11 @@ export default {
           }
         });
       } catch (e) {
-        console.log('getUrl => e', e)
+        console.warn('getUrl => e', e)
       }
     },
 
     async scanUrl(url) {
-      console.log('scanUrl => url', url)
       if (!url) {
         return
       }
@@ -118,8 +117,7 @@ export default {
       this.isFiltered = !!data.is_filtered
       this.label = data.label
       if (data.label) {
-        console.log('set block')
-        await this.setBlockList(this.url, data)
+        await this.setBlockList(url, data)
       }
       this.percent = Math.round(data.percent)
       this.features = data.features
@@ -132,7 +130,6 @@ export default {
     },
 
     async setBlockList(url, data) {
-      console.log('setBlockList => data', data)
       if (!data.label || !url) { return } // legate
       if (this.blockList.length && this.blockList.find(bl => bl.url === url)) { return }
 

@@ -45,13 +45,18 @@ const normalizeUrl = (url) => [url]
   .map(__removeTrailingSlash)
   .pop();
 
+const getHostname = (url) => {
+  return new URL(url).host
+}
+
 // ["youtube.com", "!music.youtube.com"] => [{ path: "music.youtube.com", type: "allow" }, { path: "youtube.com", type: "block" }]
 // ["https://youtube.com/", "!https://music.youtube.com/"] => [{ path: "music.youtube.com", type: "allow" }, { path: "youtube.com", type: "block" }]
 const getRules = (blocked) => {
   let rules = blocked.map(item => {
     return {
       isFiltered: item.isFiltered,
-      url: normalizeUrl(item.url)
+      url: getHostname(item.url),
+      skip: item.skip ? 1 : 0
     }
   }).sort((a, b) => b.url.length - a.url.length)
   // const allowList = blocked
@@ -72,38 +77,24 @@ const getRules = (blocked) => {
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo) {
   const url = changeInfo.pendingUrl || changeInfo.url;
-  console.log('url', url)
   if (!url || !url.startsWith("http")) {
     return;
   }
 
-  const normalizedUrl = normalizeUrl(url);
-  console.log('normalizedUrl', normalizedUrl)
+  const hostname = getHostname(url);
 
   chrome.storage.local.get(["enabled", "blocked", "resolution"], function (local) {
     let { enabled, blocked } = local;
     if (!enabled || !Array.isArray(blocked) || blocked.length === 0) {
       return;
     }
-    console.log('blocked', blocked)
     
     const rules = getRules(blocked);
-    console.log('rules', rules)
-    // const foundRule = rules.find((rule) => normalizedUrl.startsWith(rule.path) || normalizedUrl.endsWith(rule.path));
-    const foundRule = rules.find((bl => normalizedUrl.startsWith(bl.url) || normalizedUrl.endsWith(bl.url)));
-    console.log('foundRule', foundRule)
-    if (!foundRule) {
+    const foundRule = blocked.find((bl => getHostname(bl.url) === hostname));
+    if (!foundRule || foundRule.skip) {
       return;
     }
 
-    chrome.tabs.update(tabId, { url: `${chrome.runtime.getURL("blocked.html")}?url=${url}` });
-    // switch (resolution) {
-    //   case CLOSE_TAB:
-    //     chrome.tabs.remove(tabId);
-    //     break;
-    //   case SHOW_BLOCKED_INFO_PAGE:
-    //   chrome.tabs.update(tabId, { url: `${chrome.runtime.getURL("blocked.html")}?url=${url}` });
-    //   break;
-    // }
+    chrome.tabs.update(tabId, { url: `${chrome.runtime.getURL("blocked.html")}?url=${url}&is-filtered=${foundRule.isFiltered}` });
   });
 });

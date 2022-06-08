@@ -25,7 +25,7 @@ def urlPhishingChecking():
 
     input_data = URLFeatureExtraction.featureExtraction(url)
     input_data = input_data[slice(1, len(input_data))]
-    result = MachineLearning.urlPhishingChecking(input_data)
+    result = MachineLearning.urlPhishingChecking(input_data, url)
     return jsonify(result)
 
 def isBase64(s):

@@ -6,6 +6,6 @@ PORT = 6001
 HOST = '127.0.0.1'
 
 MODEL_SUGGESTIONS = {
-  1: 'Khả năng URL là bình thường',
-  0: 'CẢNH BÁO! URL có thể nguy hiểm'
+  1: 'CẢNH BÁO! URL có thể nguy hiểm',
+  0: 'Khả năng URL là bình thường'
 }
