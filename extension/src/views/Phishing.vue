@@ -7,7 +7,7 @@
         <div class="row mb-2 mt-2">
         <div class="text-center">
           {{ getDomain }}
-          <font-awesome-icon class="ml-2 reload" icon="fa-solid fa-rotate-right" />
+          <!-- <font-awesome-icon class="ml-2 reload" icon="fa-solid fa-rotate-right" /> -->
           <!-- <input v-model="url" type="text" id="url" name="url"> -->
         </div>
         </div>
@@ -112,7 +112,6 @@ export default {
       const { data } = await axios.post(URL_MC, {
         url
       })
-      console.log('scanUrl => data', data)
       this.clearData()
       this.isFiltered = !!data.is_filtered
       this.label = data.label

@@ -57,7 +57,7 @@ const getRules = (blocked) => {
       url: getHostname(item.url),
       skip: item.skip ? 1 : 0
     }
-  })
+})
   // const allowList = blocked
   //   .filter((item) => item.startsWith("!"))
   //   .map((item) => normalizeUrl(item.substring(1)));
@@ -89,14 +89,18 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo) {
     }
     
     const foundRule = blocked.find((bl => getHostname(bl.url) === hostname));
-    console.log('🚀 ~ u', u)
+    console.log('async => foundRule', foundRule)
+
     if (!foundRule) {
       fetch('http://127.0.0.1:8000/api/url-phishing-checking', {
         method: 'POST',
-        body: { url: url }
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ url: url })
       }).then(response => response.json())
         .then(data => {
-          console.log(data.data)
+          console.log(data)
         })
     }
     if (!foundRule || foundRule.skip) {
