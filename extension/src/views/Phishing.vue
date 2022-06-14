@@ -19,13 +19,32 @@
         </div>
         <div class="text-center mb-2" :class="!label ? 'status' : 'status-alert'">{{ getStatus }}</div>
       </div>
-      <button :disabled="!features.length > 0" type="button" class="btn btn-success mb-2" @click="showBlockList">Xem chi tiết</button>
+      <button :disabled="features.length > 0" type="button" class="btn btn-success mb-2" @click="showBlockList">Xem chi tiết</button>
       <button type="button" class="btn btn-report" @click="showBlockList">Báo cáo</button>
     </div>
+    <feature-modal ref="modalFeature" />
+    <modal
+      v-show="isModalVisible"
+      @close="closeModal"
+    >
+      <template v-slot:header>
+        This is a new modal header.
+      </template>
+
+      <template v-slot:body>
+        This is a new modal body.
+      </template>
+
+      <template v-slot:footer>
+        This is a new modal footer.
+      </template>
+    </modal>
   </div>
 </template>
 <script>
 import axios from 'axios'
+import FeatureModal from './FeatureModal.vue'
+import Modal from './Modal.vue'
 
 const URL_MC = process.env.VUE_APP_URL
 
@@ -38,6 +57,10 @@ const PHISHING = 1
 const LEGATE = 0
 
 export default {
+  components: {
+    FeatureModal,
+    Modal
+  },
   data() {
     return {
       loading: false,
@@ -46,7 +69,8 @@ export default {
       features: [],
       percent: 0,
       blockList: [],
-      isFiltered: false
+      isFiltered: false,
+      isModalVisible: false
     }
   },
 
@@ -64,6 +88,7 @@ export default {
     },
 
     getStatus() {
+      if (!this.url) { return '...' }
       const status = (!this.label ? 'Website này có thể an toàn.' : 'Website này không an toàn.') + (this.isFiltered ? '(Kết quả bộ lọc)' : '(Kết quả học máy)')
       return status
     }
@@ -141,8 +166,9 @@ export default {
     },
 
     showBlockList() {
-      this.getUrl()
+      // this.getUrl()
       console.log('this.blockList :>> ', this.blockList)
+      this.isModalVisible = true
     },
 
     clearData() {
@@ -150,6 +176,10 @@ export default {
       this.features = []
       this.percent = 0
       this.isFiltered = null
+    },
+
+    closeModal() {
+      this.isModalVisible = false
     }
   }
 }
