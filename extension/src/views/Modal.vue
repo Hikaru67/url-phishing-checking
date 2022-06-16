@@ -1,17 +1,18 @@
 <template>
   <transition name="modal-fade">
-    <div class="modal-backdrop">
+    <div class="modal-backdrop" @click="close">
       <div class="modal"
         role="dialog"
         aria-labelledby="modalTitle"
         aria-describedby="modalDescription"
+        @click.stop=""
       >
         <header
           class="modal-header"
           id="modalTitle"
         >
           <slot name="header">
-            This is the default tile!
+            <h2>Features</h2>
           </slot>
           <button
             type="button"
@@ -28,21 +29,18 @@
           id="modalDescription"
         >
           <slot name="body">
-            This is the default body!
+            
           </slot>
         </section>
 
         <footer class="modal-footer">
-          <slot name="footer">
-            This is the default footer!
-          </slot>
           <button
             type="button"
             class="btn-green"
             @click="close"
             aria-label="Close modal"
           >
-            Close me!
+            Close
           </button>
         </footer>
       </div>
@@ -56,9 +54,9 @@
     methods: {
       close() {
         this.$emit('close');
-      },
-    },
-  };
+      }
+    }
+  }
 </script>
 
 <style>
@@ -91,7 +89,7 @@
   .modal-header {
     position: relative;
     border-bottom: 1px solid #eeeeee;
-    color: #4AAE9B;
+    color: #219fe9;
     justify-content: space-between;
   }
 
@@ -120,8 +118,8 @@
 
   .btn-green {
     color: white;
-    background: #4AAE9B;
-    border: 1px solid #4AAE9B;
+    background: #474947;
+    border: 1px solid #474947;
     border-radius: 2px;
   }
 
@@ -134,4 +132,13 @@
   .modal-fade-leave-active {
     transition: opacity .5s ease;
   }
+
+.modal {
+  width: 400px !important;
+  min-height: auto;
+  left: 35%;
+  top: 20%;
+  overflow: hidden;
+}
+
 </style>

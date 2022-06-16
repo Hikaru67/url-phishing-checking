@@ -22,17 +22,18 @@
       <button :disabled="features.length > 0" type="button" class="btn btn-success mb-2" @click="showBlockList">Xem chi tiết</button>
       <button type="button" class="btn btn-report" @click="showBlockList">Báo cáo</button>
     </div>
-    <feature-modal ref="modalFeature" />
+    <feature-modal />
     <modal
       v-show="isModalVisible"
+      ref="modalFeature"
       @close="closeModal"
     >
       <template v-slot:header>
-        This is a new modal header.
+        <h4>Features extracted</h4>
       </template>
 
       <template v-slot:body>
-        This is a new modal body.
+        {{ getFeatureKey }}
       </template>
 
       <template v-slot:footer>
@@ -45,6 +46,7 @@
 import axios from 'axios'
 import FeatureModal from './FeatureModal.vue'
 import Modal from './Modal.vue'
+import { FEATURES } from './../config'
 
 const URL_MC = process.env.VUE_APP_URL
 
@@ -70,7 +72,8 @@ export default {
       percent: 0,
       blockList: [],
       isFiltered: false,
-      isModalVisible: false
+      isModalVisible: false,
+      FEATURES
     }
   },
 
@@ -91,6 +94,10 @@ export default {
       if (!this.url) { return '...' }
       const status = (!this.label ? 'Website này có thể an toàn.' : 'Website này không an toàn.') + (this.isFiltered ? '(Kết quả bộ lọc)' : '(Kết quả học máy)')
       return status
+    },
+
+    getFeatureKey() {
+      return Object.keys(this.FEATURES)
     }
   },
 
