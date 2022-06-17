@@ -47,7 +47,7 @@ export default {
       loading: false,
       url: '',
       label: 1,
-      features: [26,1,0,0,0,0,0,1,0,0,1,2,0,0,1,0,0,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1],
+      features: [],
       percent: 0,
       blockList: [],
       isFiltered: false,
