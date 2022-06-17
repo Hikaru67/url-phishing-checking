@@ -17,11 +17,18 @@
         </div>
         <div class="text-center mb-2" :class="!label ? 'status' : 'status-alert'">{{ getStatus }}</div>
       </div>
-      <button :disabled="!features.length" type="button" class="btn btn-success mb-2" @click="showBlockList">Xem chi tiết</button>
+      <button :disabled="!features.length" type="button" class="btn btn-success mb-2" @click="showFeatures">Xem chi tiết</button>
       <ul v-if="isFeaturesVisible" class="d-flex features-list">
         <li v-for="feature in getFeatureKey" :key="feature" class="feature" :class="getFeatureColor(feature, features[FEATURES[feature]])">{{ feature }}</li>
       </ul>
-      <button type="button" class="btn btn-report" @click="showBlockList">Báo cáo</button>
+      <button type="button" class="btn btn-report" @click="prepareReport">Báo cáo</button>
+      <div v-if="isReportVisible" class="mt-3 report d-flex content-center">
+        <font-awesome-icon class="ml-2 thumb" :class="(report === 1) ? 'like' : ''" icon="fa-solid fa-thumbs-up" @click="like" />
+        <font-awesome-icon class="ml-2 thumb" :class="(report === 2) ? 'dislike' : ''" icon="fa-solid fa-thumbs-down" @click="dislike" />
+      </div>
+      <div class="thanks">
+        <p>Cảm ơn bạn đã báo cáo kết quả!</p>
+      </div>
     </div>
   </div>
 </template>
@@ -52,7 +59,9 @@ export default {
       blockList: [],
       isFiltered: false,
       isFeaturesVisible: false,
-      FEATURES
+      FEATURES,
+      report: 0,
+      isReportVisible: false
     }
   },
 
@@ -151,9 +160,11 @@ export default {
       this.getBlockList()
     },
 
-    showBlockList() {
+    showFeatures() {
       // this.getUrl()
       console.log('this.blockList :>> ', this.blockList)
+      this.isReportVisible = false
+      this.report = 0
       this.isFeaturesVisible = !this.isFeaturesVisible
     },
 
@@ -180,7 +191,21 @@ export default {
         return 'b-green'
       }
       return value ? 'b-red' : 'b-green'
-    }
+    },
+
+    prepareReport() {
+      this.isFeaturesVisible = false
+      this.report = 0
+      this.isReportVisible = !this.isReportVisible
+    },
+
+    like() {
+      this.report = 1
+    },
+
+    dislike() {
+      this.report = 2
+    },
   }
 }
 </script>
@@ -233,13 +258,30 @@ export default {
   background-color: rgb(65 66 94 / 98%);
   border-color: rgb(65 66 94 / 98%);
 }
-.reload {
+.thumb {
   &:hover {
-    cursor: reload;
+    cursor: pointer;
   }
+  font-size: 35px;
   display: inline-block;
   margin-left: 10px;
-  color: green;
+  color: #b3b3b3;
+  &[data-icon='thumbs-up'] {
+    &:hover {
+      color: #33a133;
+    }
+  }
+  &[data-icon='thumbs-down'] {
+    &:hover {
+      color: #cd4747;
+    }
+  }
+}
+.like {
+  color: #33a133;
+}
+.dislike {
+  color: #cd4747;
 }
 .shader {
   opacity: 0.3;
@@ -256,5 +298,9 @@ export default {
     padding: 0.2rem 0.5rem;
     border-radius: 25px;
   }
+}
+
+.report {
+  justify-content: space-evenly
 }
 </style>
