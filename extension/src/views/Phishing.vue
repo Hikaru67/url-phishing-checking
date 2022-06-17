@@ -7,8 +7,6 @@
         <div class="row mb-2 mt-2">
         <div class="text-center">
           {{ getDomain }}
-          <!-- <font-awesome-icon class="ml-2 reload" icon="fa-solid fa-rotate-right" /> -->
-          <!-- <input v-model="url" type="text" id="url" name="url"> -->
         </div>
         </div>
         <div class="m-auto">
@@ -20,37 +18,15 @@
         <div class="text-center mb-2" :class="!label ? 'status' : 'status-alert'">{{ getStatus }}</div>
       </div>
       <button :disabled="!features.length" type="button" class="btn btn-success mb-2" @click="showBlockList">Xem chi tiết</button>
-      <ul v-if="isModalVisible" class="d-flex features-list">
+      <ul v-if="isFeaturesVisible" class="d-flex features-list">
         <li v-for="feature in getFeatureKey" :key="feature" class="feature" :class="getFeatureColor(feature, features[FEATURES[feature]])">{{ feature }}</li>
       </ul>
       <button type="button" class="btn btn-report" @click="showBlockList">Báo cáo</button>
     </div>
-    <feature-modal />
-    <!-- <modal
-      v-show="isModalVisible"
-      ref="modalFeature"
-      @close="closeModal"
-    >
-      <template v-slot:header>
-        <h4>Features extracted</h4>
-      </template>
-
-      <template v-slot:body>
-      <ul class="d-flex features-list">
-        <li v-for="feature in getFeatureKey" :key="feature" class="feature" :class="getFeatureColor(feature, features[FEATURES[feature]])">{{ feature }}</li>
-      </ul>
-      </template>
-
-      <template v-slot:footer>
-        This is a new modal footer.
-      </template>
-    </modal> -->
   </div>
 </template>
 <script>
 import axios from 'axios'
-import FeatureModal from './FeatureModal.vue'
-import Modal from './Modal.vue'
 import { FEATURES } from './../config'
 
 const URL_MC = process.env.VUE_APP_URL
@@ -65,8 +41,6 @@ const LEGATE = 0
 
 export default {
   components: {
-    FeatureModal,
-    Modal
   },
   data() {
     return {
@@ -77,7 +51,7 @@ export default {
       percent: 0,
       blockList: [],
       isFiltered: false,
-      isModalVisible: false,
+      isFeaturesVisible: false,
       FEATURES
     }
   },
@@ -180,7 +154,7 @@ export default {
     showBlockList() {
       // this.getUrl()
       console.log('this.blockList :>> ', this.blockList)
-      this.isModalVisible = !this.isModalVisible
+      this.isFeaturesVisible = !this.isFeaturesVisible
     },
 
     clearData() {
@@ -191,7 +165,7 @@ export default {
     },
 
     closeModal() {
-      this.isModalVisible = false
+      this.isFeaturesVisible = false
     },
 
     getFeatureColor(feature, value) {
