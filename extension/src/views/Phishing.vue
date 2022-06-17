@@ -19,11 +19,14 @@
         </div>
         <div class="text-center mb-2" :class="!label ? 'status' : 'status-alert'">{{ getStatus }}</div>
       </div>
-      <button :disabled="features.length > 0" type="button" class="btn btn-success mb-2" @click="showBlockList">Xem chi tiết</button>
+      <button :disabled="!features.length" type="button" class="btn btn-success mb-2" @click="showBlockList">Xem chi tiết</button>
+      <ul v-if="isModalVisible" class="d-flex features-list">
+        <li v-for="feature in getFeatureKey" :key="feature" class="feature" :class="getFeatureColor(feature, features[FEATURES[feature]])">{{ feature }}</li>
+      </ul>
       <button type="button" class="btn btn-report" @click="showBlockList">Báo cáo</button>
     </div>
     <feature-modal />
-    <modal
+    <!-- <modal
       v-show="isModalVisible"
       ref="modalFeature"
       @close="closeModal"
@@ -33,13 +36,15 @@
       </template>
 
       <template v-slot:body>
-        {{ getFeatureKey }}
+      <ul class="d-flex features-list">
+        <li v-for="feature in getFeatureKey" :key="feature" class="feature" :class="getFeatureColor(feature, features[FEATURES[feature]])">{{ feature }}</li>
+      </ul>
       </template>
 
       <template v-slot:footer>
         This is a new modal footer.
       </template>
-    </modal>
+    </modal> -->
   </div>
 </template>
 <script>
@@ -68,7 +73,7 @@ export default {
       loading: false,
       url: '',
       label: 1,
-      features: [],
+      features: [26,1,0,0,0,0,0,1,0,0,1,2,0,0,1,0,0,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1],
       percent: 0,
       blockList: [],
       isFiltered: false,
@@ -175,7 +180,7 @@ export default {
     showBlockList() {
       // this.getUrl()
       console.log('this.blockList :>> ', this.blockList)
-      this.isModalVisible = true
+      this.isModalVisible = !this.isModalVisible
     },
 
     clearData() {
@@ -187,6 +192,20 @@ export default {
 
     closeModal() {
       this.isModalVisible = false
+    },
+
+    getFeatureColor(feature, value) {
+      if (feature === 'Domain_Length') {
+        if (value > 50) { return 'b-red' }
+        if (value > 35) { return 'b-yellow' }
+        return 'b-green'
+      }
+      if (feature === 'Subdomain_Level') {
+        if (value > 6) { return 'b-red' }
+        if (value > 3) { return 'b-yellow' }
+        return 'b-green'
+      }
+      return value ? 'b-red' : 'b-green'
     }
   }
 }
@@ -210,10 +229,19 @@ export default {
 }
 .status {
   font-size: 16px;
-  color: green;
+  color: #33a133;
 }
 .status-alert {
   color: red;
+}
+.b-green {
+  background-color: green !important;
+}
+.b-red {
+  background-color: #cd4747 !important;
+}
+.b-yellow {
+  background-color: rgb(202, 202, 76) !important;
 }
 .btn {
   display: block;
@@ -241,5 +269,18 @@ export default {
 }
 .shader {
   opacity: 0.3;
+}
+
+.features-list {
+  flex-wrap: wrap;
+  padding: 0;
+  .feature {
+    font-size: 12px;
+    margin: 0.15rem;
+    display: inline-block;
+    color: #fff;
+    padding: 0.2rem 0.5rem;
+    border-radius: 25px;
+  }
 }
 </style>

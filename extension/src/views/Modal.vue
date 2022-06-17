@@ -134,10 +134,10 @@
   }
 
 .modal {
-  width: 400px !important;
-  min-height: auto;
-  left: 35%;
-  top: 20%;
+  width: 650px !important;
+  height: 400px !important;
+  left: unset;
+  top: unset;
   overflow: hidden;
 }
 
