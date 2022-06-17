@@ -7,8 +7,6 @@
         <div class="row mb-2 mt-2">
         <div class="text-center">
           {{ getDomain }}
-          <!-- <font-awesome-icon class="ml-2 reload" icon="fa-solid fa-rotate-right" /> -->
-          <!-- <input v-model="url" type="text" id="url" name="url"> -->
         </div>
         </div>
         <div class="m-auto">
@@ -19,13 +17,17 @@
         </div>
         <div class="text-center mb-2" :class="!label ? 'status' : 'status-alert'">{{ getStatus }}</div>
       </div>
-      <button :disabled="!features.length > 0" type="button" class="btn btn-success mb-2" @click="showBlockList">Xem chi tiết</button>
+      <button :disabled="!features.length" type="button" class="btn btn-success mb-2" @click="showBlockList">Xem chi tiết</button>
+      <ul v-if="isFeaturesVisible" class="d-flex features-list">
+        <li v-for="feature in getFeatureKey" :key="feature" class="feature" :class="getFeatureColor(feature, features[FEATURES[feature]])">{{ feature }}</li>
+      </ul>
       <button type="button" class="btn btn-report" @click="showBlockList">Báo cáo</button>
     </div>
   </div>
 </template>
 <script>
 import axios from 'axios'
+import { FEATURES } from './../config'
 
 const URL_MC = process.env.VUE_APP_URL
 
@@ -38,6 +40,8 @@ const PHISHING = 1
 const LEGATE = 0
 
 export default {
+  components: {
+  },
   data() {
     return {
       loading: false,
@@ -46,7 +50,9 @@ export default {
       features: [],
       percent: 0,
       blockList: [],
-      isFiltered: false
+      isFiltered: false,
+      isFeaturesVisible: false,
+      FEATURES
     }
   },
 
@@ -64,8 +70,13 @@ export default {
     },
 
     getStatus() {
+      if (!this.url) { return '...' }
       const status = (!this.label ? 'Website này có thể an toàn.' : 'Website này không an toàn.') + (this.isFiltered ? '(Kết quả bộ lọc)' : '(Kết quả học máy)')
       return status
+    },
+
+    getFeatureKey() {
+      return Object.keys(this.FEATURES)
     }
   },
 
@@ -141,8 +152,9 @@ export default {
     },
 
     showBlockList() {
-      this.getUrl()
+      // this.getUrl()
       console.log('this.blockList :>> ', this.blockList)
+      this.isFeaturesVisible = !this.isFeaturesVisible
     },
 
     clearData() {
@@ -150,6 +162,24 @@ export default {
       this.features = []
       this.percent = 0
       this.isFiltered = null
+    },
+
+    closeModal() {
+      this.isFeaturesVisible = false
+    },
+
+    getFeatureColor(feature, value) {
+      if (feature === 'Domain_Length') {
+        if (value > 50) { return 'b-red' }
+        if (value > 35) { return 'b-yellow' }
+        return 'b-green'
+      }
+      if (feature === 'Subdomain_Level') {
+        if (value > 6) { return 'b-red' }
+        if (value > 3) { return 'b-yellow' }
+        return 'b-green'
+      }
+      return value ? 'b-red' : 'b-green'
     }
   }
 }
@@ -173,10 +203,19 @@ export default {
 }
 .status {
   font-size: 16px;
-  color: green;
+  color: #33a133;
 }
 .status-alert {
   color: red;
+}
+.b-green {
+  background-color: green !important;
+}
+.b-red {
+  background-color: #cd4747 !important;
+}
+.b-yellow {
+  background-color: rgb(202, 202, 76) !important;
 }
 .btn {
   display: block;
@@ -204,5 +243,18 @@ export default {
 }
 .shader {
   opacity: 0.3;
+}
+
+.features-list {
+  flex-wrap: wrap;
+  padding: 0;
+  .feature {
+    font-size: 12px;
+    margin: 0.15rem;
+    display: inline-block;
+    color: #fff;
+    padding: 0.2rem 0.5rem;
+    border-radius: 25px;
+  }
 }
 </style>
