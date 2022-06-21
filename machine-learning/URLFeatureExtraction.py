@@ -29,7 +29,7 @@ def numDots(url):
 # ExtractResult(subdomain='lol1', domain='domain', suffix='com')
 def subdomainLevel(url):
     try:
-        subdomain = tldextract.extract(url)
+        subdomain = tldextract.extract(url).subdomain
         if len(subdomain):
             return subdomain.count('.') + 1
         return 0
@@ -96,7 +96,9 @@ def numPercent(url):
 def numQueryComponents(url):
     try:
         query = urlparse(url).query
-        return query.count('&') + 1
+        if len(query):
+            return query.count('&') + 1
+        return 0
     except:
         return 0
 
@@ -142,7 +144,7 @@ def domainInSubdomains(url):
     try:
         subdomain = tldextract.extract(url).subdomain
         if len(subdomain):
-            if (len(tldextract.extract(url).suffix)):
+            if (len(tldextract.extract(subdomain).suffix)):
                 return 1
         return 0
     except:
@@ -152,7 +154,7 @@ def domainInPaths(url):
     try:
         path = urlparse(url).path.split('/')
         for pa in path:
-            if (len(tldextract.extract(url).suffix)):
+            if (len(tldextract.extract(pa).suffix)):
                 return 1
         return 0
     except:
@@ -387,8 +389,10 @@ def featureExtraction2(url):
     features = []
     # Address bar based features (10)
     features.append(getDomain(url))
-
-    features.append(domainLength(url))
+    features.append(subdomainLevel(url))
+    features.append(numQueryComponents(url))
+    features.append(domainInSubdomains(url))
+    features.append(domainInPaths(url))
     return features
 
 # Function to extract features
@@ -397,24 +401,24 @@ def featureExtraction(url):
     # Address bar based features (10)
     features.append(getDomain(url))
 
-    features.append(domainLength(url))
+    features.append(domainLength(url))# 1
     features.append(subdomainLevel(url))
     # features.append(urlLength(url))
     # features.append(getDepth(url))
     features.append(haveAtSign(url))
     features.append(haveTildeSymbol(url))
-    features.append(noHttps(url))
+    features.append(noHttps(url))# 5
     features.append(havingIP(url))
     features.append(domainInSubdomains(url))
-    features.append(domainInPaths(url))
+    features.append(domainInPaths(url))# 8
     features.append(httpInHostname(url))
     features.append(doubleSlashInPath(url))
 
-    features.append(numDots(url))
+    features.append(numDots(url))# 11
     features.append(numDashesInHostname(url))
     features.append(numUnderscore(url))
     features.append(numPercent(url))
-    features.append(numQueryComponents(url))
+    features.append(numQueryComponents(url))# 15
     features.append(numAmpersand(url))
     features.append(numHash(url))
     features.append(numNumericChars(url))
@@ -422,7 +426,7 @@ def featureExtraction(url):
     # features.append(queryLength(url))
     features.append(numSensitiveWords(url))
 
-    features.append(extFavicon(url))
+    features.append(extFavicon(url))#20
     features.append(redirection(url))
     features.append(tinyURL(url))
     features.append(prefixSuffix(url))
@@ -442,7 +446,7 @@ def featureExtraction(url):
         dns = 1
 
     features.append(dns)
-    features.append(1 if dns == 1 else domainAge(domain_name))
+    features.append(1 if dns == 1 else domainAge(domain_name))# 25
     features.append(1 if dns == 1 else domainEnd(domain_name))
     
     features.append(rankHost(url))
@@ -454,7 +458,7 @@ def featureExtraction(url):
     except:
         response = ""
 
-    features.append(iframe(response))
+    features.append(iframe(response))# 30
     features.append(mouseOver(response))
     features.append(rightClick(response))
     features.append(forwarding(response))
