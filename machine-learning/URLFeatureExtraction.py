@@ -326,7 +326,7 @@ def rankHost(url):
             return 1
         return 0
     except TypeError:
-        return 1
+        return -1
 
 def rankCountry(url):
     try:
@@ -340,7 +340,7 @@ def rankCountry(url):
             return 1
         return 0
     except TypeError:
-        return 1
+        return -1
 
 # importing required packages for this section
 import requests
@@ -393,6 +393,16 @@ def featureExtraction2(url):
     features.append(numQueryComponents(url))
     features.append(domainInSubdomains(url))
     features.append(domainInPaths(url))
+    return features
+
+def featureExtractionLost(url):
+    features = []
+    # Address bar based features (10)
+    features.append(getDomain(url))
+    features.append(urlLength(url))
+    features.append(getDepth(url))
+    features.append(pathLength(url))
+    features.append(queryLength(url))
     return features
 
 # Function to extract features
@@ -509,7 +519,7 @@ feature_names = [
     'Forwarding'
 ]
 
-def extractFeaturePhishing(type, index, limit = 1000):    
+def extractFeaturePhishing(type, index, limit = 8000):
     all_result_phishing = []
     all_result_legitimate = []
 
@@ -522,7 +532,7 @@ def extractFeaturePhishing(type, index, limit = 1000):
     lines = f1.readlines()
     while ((i-index) < limit):
         try:
-            f1 = open("data_prepare/phishing2/phishing_" + str(int(index/limit)) + ".txt", "a")
+            f1 = open("data_prepare/phishing2/phishing_lost" + str(int(index/limit)) + ".txt", "a")
             result_phishing = featureExtraction2(lines[i].replace('\n', ''))
             print(result_phishing, "i = ", i)
             result_phishing.append(type)
@@ -534,11 +544,11 @@ def extractFeaturePhishing(type, index, limit = 1000):
             i += 1
             pass
 
-def extractFeatureLegate(type, index, limit = 1000):
+def extractFeatureLegate(type, index, limit = 6000):
     all_result_phishing = []
     all_result_legitimate = []
 
-    f1 = open("data_prepare/newLegate.txt", "r")
+    f1 = open("data_prepare/webrank.txt", "r")
     index = int(index)
     type = int(type)
     i = index
@@ -547,8 +557,8 @@ def extractFeatureLegate(type, index, limit = 1000):
     lines = f1.readlines()
     while ((i-index) < limit):
         try:
-            f1 = open("data_prepare/legate2/legate_" + str(int(index/limit)) + ".txt", "a")
-            result_phishing = featureExtraction2(lines[i].replace('\n', ''))
+            f1 = open("data_prepare/webrank/legate_lost" + str(int(index/limit)) + ".txt", "a")
+            result_phishing = featureExtractionLost(lines[i].replace('\n', ''))
             print(result_phishing, "i = ", i)
             result_phishing.append(type)
             all_result_phishing.append(result_phishing)
