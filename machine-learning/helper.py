@@ -20,7 +20,7 @@ def addProtocol():
 def prepareData():
     all_result_phishing = []
 
-    f1 = open("data_prepare/legate2/legate_processed2.txt", "r")
+    f1 = open("data_prepare/webrank/legate_processed_af.txt", "r")
     lines = f1.readlines()
     for i in range(len(lines)):
         lines[i] = lines[i].replace('\n','').split(', ')
@@ -29,7 +29,7 @@ def prepareData():
                 lines[i][j] = int(lines[i][j])
     f1.close()
 
-    f2 = open("data_prepare/phishing2/phishing_processed22.txt", "r")
+    f2 = open("data_prepare/phishing2/phishing_processed_af.txt", "r")
     legates = f2.readlines()
     for i in range(len(legates)):
         legates[i] = legates[i].replace('\n','').split(', ')
@@ -39,20 +39,22 @@ def prepareData():
         lines.append(legates[i])
     f2.close()
     all_result_phishing = pd.DataFrame(lines)
-    all_result_phishing.to_csv('data/newProcessed22.csv')
+    all_result_phishing.to_csv('data/ProcessedHasWebRank.csv')
 
 def addFeature():
-    f1 = open("data_prepare/webrank/legate_processed.txt", "r")
-    f2 = open("data_prepare/webrank/legate_processed_af.txt", "a")
-    lost = open("data_prepare/webrank/legate_lost0.txt", "r")
+    f1 = open("data_prepare/phishing2/phishing_processed22.txt", "r")
+    f2 = open("data_prepare/phishing2/phishing_processed_af.txt", "a")
+    lost = open("data_prepare/phishing2/phishing_lost0.txt", "r")
     lines = f1.readlines()
     linesLost = lost.readlines()
     for i in range(len(lines)):
         # print(lines[i])
         lines[i] = lines[i].replace('\n','').split(', ')
         linesLost[i] = linesLost[i].replace('\n','').split(', ')
-        lines[i][2] += ', ' + linesLost[i][1] + ', 0'
-        lines[i][18] += ', 0, 0'
+        lines[i][2] = linesLost[i][1]
+        lines[i][15] = linesLost[i][2]
+        lines[i][7] = linesLost[i][3]
+        lines[i][8] = linesLost[i][4]
         for j in range(len(lines[i])):
             if j>0:
                 lines[i][0] += ', ' + lines[i][j]
@@ -93,6 +95,6 @@ if __name__ == '__main__':
     # print(res)
     # mergeFile()
     # appendFeature()
-    # prepareData()
-    addFeature()
+    prepareData()
+    # addFeature()
     # addProtocol()
