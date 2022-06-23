@@ -544,11 +544,11 @@ def extractFeaturePhishing(type, index, limit = 8000):
             i += 1
             pass
 
-def extractFeatureLegate(type, index, limit = 6000):
+def extractFeatureLegate(type, index, limit = 1000):
     all_result_phishing = []
     all_result_legitimate = []
 
-    f1 = open("data_prepare/webrank.txt", "r")
+    f1 = open("data_prepare/webrank/des2.txt", "r")
     index = int(index)
     type = int(type)
     i = index
@@ -557,8 +557,8 @@ def extractFeatureLegate(type, index, limit = 6000):
     lines = f1.readlines()
     while ((i-index) < limit):
         try:
-            f1 = open("data_prepare/webrank/legate_lost" + str(int(index/limit)) + ".txt", "a")
-            result_phishing = featureExtractionLost(lines[i].replace('\n', ''))
+            f1 = open("data_prepare/webrank/legate_" + str(int(index/limit)) + ".txt", "a")
+            result_phishing = featureExtraction(lines[i].replace('\n', ''))
             print(result_phishing, "i = ", i)
             result_phishing.append(type)
             all_result_phishing.append(result_phishing)
