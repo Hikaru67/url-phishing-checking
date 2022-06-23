@@ -317,7 +317,7 @@ def domainEnd(domain_name):
 def rankHost(url):
     try:
         # Filling the whitespaces in the URL if any
-        url = urllib.parse.quote(url)
+        # url = urllib.parse.quote(url)
         rank = \
         xml = BeautifulSoup(urllib.request.urlopen("https://data.alexa.com/data?cli=10&dat=s&url=" + url).read(), "xml")
         rank = xml.find("REACH")['RANK']
@@ -331,7 +331,7 @@ def rankHost(url):
 def rankCountry(url):
     try:
         # Filling the whitespaces in the URL if any
-        url = urllib.parse.quote(url)
+        # url = urllib.parse.quote(url)
         rank = \
         xml = BeautifulSoup(urllib.request.urlopen("https://data.alexa.com/data?cli=10&dat=s&url=" + url).read(), "xml")
         rank = xml.find("COUNTRY")['RANK']
@@ -388,11 +388,21 @@ def forwarding(response):
 def featureExtraction2(url):
     features = []
     # Address bar based features (10)
-    features.append(getDomain(url))
-    features.append(subdomainLevel(url))
-    features.append(numQueryComponents(url))
-    features.append(domainInSubdomains(url))
-    features.append(domainInPaths(url))
+    features.append(url)
+    dns = 0
+    try:
+        flags = 0
+        flags = flags | whois.NICClient.WHOIS_QUICK
+        domain_name = whois.whois(url, flags=flags)
+    except Exception:
+        dns = 1
+
+    features.append(dns)
+    features.append(1 if dns == 1 else domainAge(domain_name))# 25
+    features.append(1 if dns == 1 else domainEnd(domain_name))
+    
+    features.append(rankHost(url))
+    features.append(rankCountry(url))
     return features
 
 def featureExtractionLost(url):
@@ -544,11 +554,11 @@ def extractFeaturePhishing(type, index, limit = 8000):
             i += 1
             pass
 
-def extractFeatureLegate(type, index, limit = 1000):
+def extractFeatureLegate(type, index, limit = 5000):
     all_result_phishing = []
     all_result_legitimate = []
 
-    f1 = open("data_prepare/webrank/des2.txt", "r")
+    f1 = open("data_prepare/webrank/domain.txt", "r")
     index = int(index)
     type = int(type)
     i = index
@@ -557,8 +567,8 @@ def extractFeatureLegate(type, index, limit = 1000):
     lines = f1.readlines()
     while ((i-index) < limit):
         try:
-            f1 = open("data_prepare/webrank/legate_" + str(int(index/limit)) + ".txt", "a")
-            result_phishing = featureExtraction(lines[i].replace('\n', ''))
+            f1 = open("data_prepare/webrank/legate_fix" + str(int(index/limit)) + ".txt", "a")
+            result_phishing = featureExtraction2(lines[i].replace('\n', ''))
             print(result_phishing, "i = ", i)
             result_phishing.append(type)
             all_result_phishing.append(result_phishing)
