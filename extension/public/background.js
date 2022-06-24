@@ -1,4 +1,6 @@
 "use strict";
+const API_URL = "http://14.225.44.73/api/url-phishing-checking";
+// const API_URL = "http://127.0.0.1:5000/url-phishing-checking";
 
 /* global chrome */
 
@@ -74,15 +76,15 @@ const getRules = (blocked) => {
   return rules;
 };
 
-chrome.tabs.onUpdated.addListener(function (tabId, changeInfo) {
+chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
   const url = changeInfo.pendingUrl || changeInfo.url;
   if (!url || !url.startsWith("http")) {
     return;
   }
-
+  console.log('🚀 ~ url', url)
   const hostname = getHostname(url);
 
-  chrome.storage.local.get(["enabled", "blocked", "resolution"], function async (local) {
+  chrome.storage.local.get(["enabled", "blocked", "resolution"], async (local) => {
     let { enabled, blocked } = local;
     if (!enabled || !Array.isArray(blocked) || blocked.length === 0) {
       return;
@@ -92,16 +94,16 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo) {
     console.log('async => foundRule', foundRule)
 
     if (!foundRule) {
-      fetch('http://127.0.0.1:8000/api/url-phishing-checking', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ url: url })
-      }).then(response => response.json())
-        .then(data => {
-          console.log(data)
+      const result = await phishingChecking(url)
+      if (result.label) {
+        blocked.push({
+          url,
+          isFiltered: result.is_filtered
         })
+        await chrome.storage.local.set({ blocked: blocked })
+        // alert(result)
+        console.log('🚀 ~ result', result)
+      }
     }
     if (!foundRule || foundRule.skip) {
       return;
@@ -112,22 +114,25 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo) {
 });
 
 const phishingChecking = async (url) => {
-  const response = await fetch('http://127.0.0.1:8000/api/url-phishing-checking', {
-    method: 'POST',
-    body: { url: url }
-  })
+  const response = await postData(API_URL, { url })
   console.log('🚀 ~ response', response)
+  return response
 }
-        // .then(response => response.json())
-        // .then(data => {
-        //   list = data.data
-        //   list = list.map(item => {
-        //     if (item.url[item.url.length - 1] === '\n') {
-        //       item.url = item.url.substring(0, item.url.length - 1)
-        //     }
-        //     return {
-        //       url: item.url,
-        //       isFiltered: 1
-        //     }
-        //   })
-        // })
+
+async function postData(url = '', data = {}) {
+  // Default options are marked with *
+  const response = await fetch(url, {
+    method: 'POST',
+    mode: 'cors',
+    cache: 'no-cache',
+    credentials: 'same-origin',
+    headers: {
+      'Content-Type': 'application/json'
+      // 'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+    body: JSON.stringify(data)
+  });
+  return response.json();
+}

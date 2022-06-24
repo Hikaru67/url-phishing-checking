@@ -389,18 +389,6 @@ def featureExtraction2(url):
     features = []
     # Address bar based features (10)
     features.append(url)
-    dns = 0
-    try:
-        flags = 0
-        flags = flags | whois.NICClient.WHOIS_QUICK
-        domain_name = whois.whois(url, flags=flags)
-    except Exception:
-        dns = 1
-
-    features.append(dns)
-    features.append(1 if dns == 1 else domainAge(domain_name))# 25
-    features.append(1 if dns == 1 else domainEnd(domain_name))
-    
     features.append(rankHost(url))
     features.append(rankCountry(url))
     return features
@@ -429,8 +417,8 @@ def featureExtraction(url):
     features.append(haveTildeSymbol(url))
     features.append(noHttps(url))# 5
     features.append(havingIP(url))
-    features.append(domainInSubdomains(url))
-    features.append(domainInPaths(url))# 8
+    # features.append(domainInSubdomains(url))
+    # features.append(domainInPaths(url))# 8
     features.append(httpInHostname(url))
     features.append(doubleSlashInPath(url))
 
@@ -438,7 +426,7 @@ def featureExtraction(url):
     features.append(numDashesInHostname(url))
     features.append(numUnderscore(url))
     features.append(numPercent(url))
-    features.append(numQueryComponents(url))# 15
+    # features.append(numQueryComponents(url))# 15
     features.append(numAmpersand(url))
     features.append(numHash(url))
     features.append(numNumericChars(url))
@@ -462,15 +450,15 @@ def featureExtraction(url):
         flags = 0
         flags = flags | whois.NICClient.WHOIS_QUICK
         domain_name = whois.whois(urlparse(url).netloc, flags=flags)
-    except Exception:
+    except:
         dns = 1
 
     features.append(dns)
     features.append(1 if dns == 1 else domainAge(domain_name))# 25
     features.append(1 if dns == 1 else domainEnd(domain_name))
     
-    features.append(rankHost(url))
-    features.append(rankCountry(url))
+    # features.append(rankHost(url))
+    # features.append(rankCountry(url))
 
     # HTML & Javascript based features
     try:
@@ -529,11 +517,11 @@ feature_names = [
     'Forwarding'
 ]
 
-def extractFeaturePhishing(type, index, limit = 8000):
+def extractFeaturePhishing(type, index, limit = 1000):
     all_result_phishing = []
     all_result_legitimate = []
 
-    f1 = open("data_prepare/phishing2/verified_online.txt", "r")
+    f1 = open("data_prepare/phishing2/verified_filter.txt", "r")
     index = int(index)
     type = int(type)
     i = index
@@ -542,7 +530,7 @@ def extractFeaturePhishing(type, index, limit = 8000):
     lines = f1.readlines()
     while ((i-index) < limit):
         try:
-            f1 = open("data_prepare/phishing2/phishing_lost" + str(int(index/limit)) + ".txt", "a")
+            f1 = open("data_prepare/phishing2/phishing_lost_rank" + str(int(index/limit)) + ".txt", "a")
             result_phishing = featureExtraction2(lines[i].replace('\n', ''))
             print(result_phishing, "i = ", i)
             result_phishing.append(type)
