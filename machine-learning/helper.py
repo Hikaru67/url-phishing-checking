@@ -4,9 +4,9 @@ from urllib.parse import urlparse
 import pandas as pd
 
 def mergeFile():
-    origin = open('data_prepare/webrank/legate_processed.txt', 'a')
-    for i in range(5):
-        f = open('data_prepare/webrank/legate_' + str(i) + '.txt', 'r')
+    origin = open('data_prepare/phishing2/26_06/phishing_merged.txt', 'a')
+    for i in range(6):
+        f = open('data_prepare/phishing2/26_06/phishing_lost_rank' + str(i) + '.txt', 'r')
         for line in f:
             origin.write(line)
         f.close
@@ -31,7 +31,7 @@ def prepareData():
                 lines[i][j] = int(lines[i][j])
     f1.close()
 
-    f2 = open("data_prepare/phishing2/phishing_processed_af.txt", "r")
+    f2 = open("data_prepare/phishing2/26_06/phishing_af_addlostft.txt", "r")
     legates = f2.readlines()
     for i in range(len(legates)):
         legates[i] = legates[i].replace('\n','').split(', ')
@@ -41,22 +41,25 @@ def prepareData():
         lines.append(legates[i])
     f2.close()
     all_result_phishing = pd.DataFrame(lines)
-    all_result_phishing.to_csv('data/processed2604.csv')
+    all_result_phishing.to_csv('data/26_06/processed.csv')
 
 def addFeature():
-    lost = { "1337x.to": [ "1337x.to", "0", "1", "1", "0", "0", "0" ], "abc.go.com": [ "abc.go.com", "0", "0", "0", "0", "0", "0" ], "adultfriendfinder.com": [ "adultfriendfinder.com", "0", "0", "1", "0", "0", "0" ], "allrecipes.com": [ "allrecipes.com", "0", "0", "0", "0", "0", "0" ], "archiveofourown.org": [ "archiveofourown.org", "0", "0", "0", "0", "0", "0" ], "atwiki.jp": [ "atwiki.jp", "0", "1", "1", "0", "0", "0" ], "avxhome.se": [ "avxhome.se", "0", "0", "0", "0", "0", "0" ], "bigcinema.tv": [ "bigcinema.tv", "0", "0", "1", "0", "-1", "0" ], "bleacherreport.com": [ "bleacherreport.com", "0", "0", "0", "0", "0", "0" ], "caixa.gov.br": [ "caixa.gov.br", "0", "1", "1", "0", "0", "0" ], "cheezburger.com": [ "cheezburger.com", "0", "0", "0", "0", "0", "0" ], "codecanyon.net": [ "codecanyon.net", "0", "0", "0", "0", "0", "0" ], "deadspin.com": [ "deadspin.com", "0", "0", "1", "0", "0", "0" ], "depositphotos.com": [ "depositphotos.com", "0", "0", "0", "0", "0", "0" ], "duckduckgo.com": [ "duckduckgo.com", "0", "0", "0", "0", "0", "0" ], "eenadu.net": [ "eenadu.net", "0", "0", "0", "0", "0", "0" ], "elitedaily.com": [ "elitedaily.com", "0", "0", "0", "0", "0", "0" ], "esporte.uol.com.br": [ "esporte.uol.com.br", "0", "1", "0", "0", "-1", "0" ], "fishki.net": [ "fishki.net", "0", "0", "0", "0", "0", "0" ], "gawker.com": [ "gawker.com", "0", "0", "0", "0", "0", "0" ], "gizmodo.com": [ "gizmodo.com", "0", "0", "1", "0", "0", "0" ], "graphicriver.net": [ "graphicriver.net", "0", "0", "0", "0", "0", "0" ], "hdfcbank.com": [ "hdfcbank.com", "0", "0", "0", "0", "0", "0" ], "irecommend.ru": [ "irecommend.ru", "0", "0", "0", "0", "0", "0" ], "jalopnik.com": [ "jalopnik.com", "0", "0", "1", "0", "0", "0" ], "jezebel.com": [ "jezebel.com", "0", "0", "0", "0", "0", "0" ], "khabaronline.ir": [ "khabaronline.ir", "0", "1", "1", "0", "0", "0" ], "kotaku.com": [ "kotaku.com", "0", "0", "0", "0", "0", "0" ], "likemag.com": [ "likemag.com", "0", "0", "1", "-1", "-1", "0" ], "mangafox.me": [ "mangafox.me", "0", "0", "0", "0", "0", "0" ], "mashable.com": [ "mashable.com", "0", "0", "0", "0", "0", "0" ], "mediaset.it": [ "mediaset.it", "0", "0", "1", "0", "0", "0" ], "megogo.net": [ "megogo.net", "0", "0", "0", "0", "0", "0" ], "mic.com": [ "mic.com", "0", "0", "0", "0", "0", "0" ], "nametests.com": [ "nametests.com", "0", "0", "0", "0", "-1", "0" ], "nguyentandung.org": [ "nguyentandung.org", "0", "0", "1", "1", "-1", "0" ], "noticias.uol.com.br": [ "noticias.uol.com.br", "0", "1", "0", "0", "0", "0" ], "nypost.com": [ "nypost.com", "0", "0", "1", "0", "0", "0" ], "olx.pl": [ "olx.pl", "0", "0", "1", "0", "0", "0" ], "olx.ro": [ "olx.ro", "0", "0", "1", "0", "0", "0" ], "olx.ua": [ "olx.ua", "0", "1", "0", "0", "0", "0" ], "onedio.com": [ "onedio.com", "0", "0", "0", "0", "0", "0" ], "otomoto.pl": [ "otomoto.pl", "0", "0", "0", "0", "0", "0" ], "patch.com": [ "patch.com", "0", "0", "0", "0", "0", "0" ], "pelis24.com": [ "pelis24.com", "0", "0", "0", "0", "-1", "0" ], "putlocker.is": [ "putlocker.is", "0", "1", "1", "0", "0", "0" ], "sberbank.ru": [ "sberbank.ru", "0", "0", "1", "0", "0", "0" ], "seekingalpha.com": [ "seekingalpha.com", "0", "0", "1", "0", "0", "0" ], "slashdot.org": [ "slashdot.org", "0", "0", "0", "0", "0", "0" ], "stackoverflow.com": [ "stackoverflow.com", "0", "0", "0", "0", "0", "0" ], "steamcommunity.com": [ "steamcommunity.com", "0", "0", "0", "0", "0", "0" ], "themeforest.net": [ "themeforest.net", "0", "0", "0", "0", "0", "0" ], "anandtech.com": [ "anandtech.com", "0", "0", "1", "0", "0", "0" ], "arstechnica.com": [ "arstechnica.com", "0", "0", "0", "0", "0", "0" ], "ck101.com": [ "ck101.com", "0", "0", "0", "0", "0", "0" ], "cookpad.com": [ "cookpad.com", "0", "0", "0", "0", "0", "0" ], "css-tricks.com": [ "css-tricks.com", "0", "0", "0", "0", "0", "0" ], "doodle.com": [ "doodle.com", "0", "0", "1", "0", "0", "0" ], "dribbble.com": [ "dribbble.com", "0", "0", "1", "0", "0", "0" ], "elevenia.co.id": [ "elevenia.co.id", "0", "0", "0", "0", "0", "0" ], "espn.go.com": [ "espn.go.com", "0", "0", "0", "0", "0", "0" ], "evernote.com": [ "evernote.com", "0", "0", "0", "0", "0", "0" ], "fotostrana.ru": [ "fotostrana.ru", "0", "0", "0", "0", "0", "0" ], "h2porn.com": [ "h2porn.com", "0", "0", "0", "0", "0", "0" ], "himado.in": [ "himado.in", "0", "0", "1", "0", "0", "0" ], "interpark.com": [ "interpark.com", "0", "0", "0", "0", "0", "0" ], "io9.com": [ "io9.com", "0", "0", "1", "0", "0", "0" ], "lifehacker.com": [ "lifehacker.com", "0", "0", "1", "0", "0", "0" ], "mixi.jp": [ "mixi.jp", "0", "1", "1", "0", "0", "0" ], "nymag.com": [ "nymag.com", "0", "0", "0", "0", "0", "0" ], "searchengines.guru": [ "searchengines.guru", "0", "0", "0", "0", "0", "0" ], "serverfault.com": [ "serverfault.com", "0", "0", "0", "0", "0", "0" ], "skyrock.com": [ "skyrock.com", "0", "0", "0", "0", "0", "0" ], "sputniknews.com": [ "sputniknews.com", "0", "0", "0", "0", "0", "0" ], "statcounter.com": [ "statcounter.com", "0", "0", "0", "0", "0", "0" ], "tinypic.com": [ "tinypic.com", "0", "0", "0", "0", "0", "0" ], "twitter.com": [ "twitter.com", "0", "0", "0", "0", "0", "0" ], "vnexpress.net": [ "vnexpress.net", "0", "0", "0", "0", "0", "0" ], "watch-series-tv.to": [ "watch-series-tv.to", "0", "1", "1", "1", "-1", "0" ], "web.tv": [ "web.tv", "0", "0", "1", "0", "0", "0" ], "abcnews.go.com": [ "abcnews.go.com", "0", "0", "0", "0", "0", "0" ], "dealnews.com": [ "dealnews.com", "0", "0", "0", "0", "0", "0" ], "genius.com": [ "genius.com", "0", "0", "0", "0", "0", "0" ], "haraj.com.sa": [ "haraj.com.sa", "0", "1", "1", "0", "0", "0" ], "jugem.jp": [ "jugem.jp", "0", "1", "1", "0", "0", "0" ], "shareba.com": [ "shareba.com", "0", "0", "0", "1", "-1", "0" ], "slickdeals.net": [ "slickdeals.net", "0", "0", "0", "0", "0", "0" ], "sourceforge.net": [ "sourceforge.net", "0", "0", "0", "0", "0", "0" ], "teespring.com": [ "teespring.com", "0", "0", "0", "0", "0", "0" ], "tympanus.net": [ "tympanus.net", "0", "0", "0", "0", "0", "0" ], "weheartit.com": [ "weheartit.com", "0", "0", "0", "0", "0", "0" ], "worldoftanks.ru": [ "worldoftanks.ru", "0", "0", "0", "0", "0", "0" ], "akhbarelyom.com": [ "akhbarelyom.com", "0", "0", "0", "0", "0", "0" ], "elcomercio.pe": [ "elcomercio.pe", "0", "1", "1", "0", "0", "0" ], "faithtap.com": [ "faithtap.com", "0", "0", "0", "-1", "-1", "0" ], "pitchfork.com": [ "pitchfork.com", "0", "0", "1", "0", "0", "0" ], "suumo.jp": [ "suumo.jp", "0", "1", "1", "0", "0", "0" ], "getpocket.com": [ "getpocket.com", "0", "0", "0", "0", "0", "0" ], "say-move.org": [ "say-move.org", "0", "0", "0", "0", "0", "0" ], "tutsplus.com": [ "tutsplus.com", "0", "0", "0", "0", "0", "0" ], "nhs.uk": [ "nhs.uk", "0", "1", "1", "0", "0", "0" ], "ecnavi.jp": [ "ecnavi.jp", "0", "1", "1", "0", "0", "0" ], "unity3d.com": [ "unity3d.com", "0", "0", "1", "0", "0", "0" ], "amoory.com": [ "amoory.com", "0", "0", "0", "-1", "-1", "0" ], "weathernews.jp": [ "weathernews.jp", "0", "1", "1", "0", "0", "0" ], "wikiwiki.jp": [ "wikiwiki.jp", "0", "1", "1", "0", "0", "0" ], "giphy.com": [ "giphy.com", "0", "0", "0", "0", "0", "0" ], "myanimelist.net": [ "myanimelist.net", "0", "0", "0", "0", "0", "0" ], "huawei.com": [ "huawei.com", "0", "0", "0", "0", "0", "0" ], "taboola.com": [ "taboola.com", "0", "0", "0", "0", "0", "0" ], "udn.com": [ "udn.com", "0", "0", "0", "0", "0", "0" ], "europa.eu": [ "europa.eu", "0", "1", "1", "0", "0", "0" ], "perezhilton.com": [ "perezhilton.com", "0", "0", "0", "0", "0", "0" ], "wmaraci.com": [ "wmaraci.com", "0", "0", "0", "0", "0", "0" ], "fanpage.gr": [ "fanpage.gr", "0", "1", "1", "0", "0", "0" ], "pantip.com": [ "pantip.com", "0", "0", "0", "0", "0", "0" ], "tsite.jp": [ "tsite.jp", "0", "1", "1", "0", "0", "0" ], "auto.ru": [ "auto.ru", "0", "0", "1", "0", "0", "0" ], "vz.ru": [ "vz.ru", "0", "0", "0", "0", "0", "0" ], "hihi2.com": [ "hihi2.com", "0", "0", "0", "0", "0", "0" ], "so-net.ne.jp": [ "so-net.ne.jp", "0", "1", "1", "0", "0", "0" ], "fc2.com": [ "fc2.com", "0", "0", "0", "0", "0", "0" ], "mirtesen.ru": [ "mirtesen.ru", "0", "0", "0", "0", "0", "0" ], "livestream.com": [ "livestream.com", "0", "0", "0", "0", "0", "0" ], "all-free-download.com": [ "all-free-download.com", "0", "0", "0", "0", "0", "0" ], "ssa.gov": [ "ssa.gov", "0", "1", "1", "0", "0", "0" ], "alohatube.com": [ "alohatube.com", "0", "0", "0", "0", "0", "0" ], "kdnet.net": [ "kdnet.net", "0", "0", "0", "0", "0", "0" ], "pinterest.com": [ "pinterest.com", "0", "0", "1", "0", "0", "0" ], "bankmellat.ir": [ "bankmellat.ir", "0", "1", "1", "0", "0", "0" ], "myegy.to": [ "myegy.to", "0", "1", "1", "1", "-1", "0" ] }
-    f1 = open("data_prepare/webrank/legate_af.txt", "r")
-    f2 = open("data_prepare/webrank/legate_af_addlostft.txt", "a")
+    lost = open("data_prepare/phishing2/26_06/phishing_merged.txt", "r")
+    f1 = open("data_prepare/phishing2/phishing_processed_af.txt", "r")
+    f2 = open("data_prepare/phishing2/26_06/phishing_af_addlostft.txt", "a")
     # lost = open("data_prepare/phishing2/phishing_lost0.txt", "r")
+    lostObj = {}
+    lostLines = lost.readlines()
+    for i in range(len(lostLines)):
+        lostObj[lostLines[i].split(',')[0]] = lostLines[i].split(', ')[1:]
     lines = f1.readlines()
     # linesLost = lost.readlines()
     for i in range(len(lines)):
         try:
-            print(i)
             lines[i] = lines[i].replace('\n','').split(', ')
-            changer = lost[lines[i][0]]
-            lines[i][2] += ', ' + lines[i][1] + ', 0'
-            lines[i][18] += ', 0, 0'
+            # changer = lost[lines[i][0]]
+            lines[i][31] = lostObj[lines[i][0]][0]
+            lines[i][32] = lostObj[lines[i][0]][1]
             # for j in range(len(lines[i])):
             #     if j>0:
             lines[i][0] += ', ' + ', '.join(lines[i][1:])

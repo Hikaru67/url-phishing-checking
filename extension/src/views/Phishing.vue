@@ -1,7 +1,7 @@
 <template>
   <div>
     <img class="background" src="../../public/background.png" alt="" />
-    <div class="extension">
+    <div v-show="url" class="extension">
       <div v-if="loading" class="loader" />
       <div :class="loading ? 'shader' : ''">
         <div class="row mb-2 mt-2">
@@ -21,14 +21,17 @@
       <ul v-if="isFeaturesVisible" class="d-flex features-list">
         <li v-for="feature in getFeatureKey" :key="feature" class="feature" :class="getFeatureColor(feature, features[FEATURES[feature]])">{{ feature }}</li>
       </ul>
-      <button type="button" class="btn btn-report" @click="prepareReport">Báo cáo</button>
+      <button type="button" class="btn btn-report" :disabled="!label" @click="prepareReport">Báo cáo</button>
       <div v-if="isReportVisible" class="mt-3 report d-flex content-center">
-        <font-awesome-icon class="ml-2 thumb" :class="(report === 1) ? 'like' : ''" icon="fa-solid fa-thumbs-up" @click="like" />
-        <font-awesome-icon class="ml-2 thumb" :class="(report === 2) ? 'dislike' : ''" icon="fa-solid fa-thumbs-down" @click="dislike" />
+        <font-awesome-icon class="ml-2 thumb" :class="(report === 1) ? 'like' : ''" icon="fa-solid fa-thumbs-up" @click="action(LIKE)" />
+        <font-awesome-icon class="ml-2 thumb" :class="(report === 2) ? 'dislike' : ''" icon="fa-solid fa-thumbs-down" @click="action(DISLIKE)" />
       </div>
-      <div class="thanks">
+      <div v-if="report && isReportVisible" class="thanks text-center mt-2">
         <p>Cảm ơn bạn đã báo cáo kết quả!</p>
       </div>
+    </div>
+    <div v-show="!url" class="text-center">
+      ---
     </div>
   </div>
 </template>
@@ -36,13 +39,15 @@
 import axios from 'axios'
 import { FEATURES } from './../config'
 
-const URL_MC = process.env.VUE_APP_URL
+const URL_MC = process.env.VUE_APP_URL + '/url-phishing-checking'
+const URL_RP = 'http://127.0.0.1:8000/api/report'
 
 const LABEL = {
   good: 'good',
   bad: 'bad'
 }
-
+const LIKE = 1
+const DISLIKE = 2
 const PHISHING = 1
 const LEGATE = 0
 
@@ -61,7 +66,9 @@ export default {
       isFeaturesVisible: false,
       FEATURES,
       report: 0,
-      isReportVisible: false
+      isReportVisible: false,
+      LIKE,
+      DISLIKE
     }
   },
 
@@ -110,10 +117,14 @@ export default {
           args: [],
           func: () => {
             const url = window.location.href
+            console.log('getUrl => url', url)
             return url ? url : ''
           }
         }, async (result) => {
-          this.url = result[0].result
+          console.log('getUrl => result', result)
+          if (result && result.length) {
+            this.url = result[0].result
+          }
           if (this.url) {
             await this.scanUrl(this.url)
           }
@@ -197,6 +208,26 @@ export default {
       this.isFeaturesVisible = false
       this.report = 0
       this.isReportVisible = !this.isReportVisible
+    },
+
+    action(type) {
+      axios.post(URL_RP, {
+        url: this.url,
+        label: this.label,
+        type
+      })
+      switch (type) {
+        case 1:
+          this.like()
+          break;
+        case 2:
+          this.dislike()
+          break;
+      }
+
+      setTimeout(() => {
+        this.isReportVisible = !this.isReportVisible
+      }, 2000)
     },
 
     like() {
@@ -302,5 +333,13 @@ export default {
 
 .report {
   justify-content: space-evenly
+}
+
+.thanks {
+  background-color: green;
+  border-radius: 13px;
+  width: 250px;
+  color: #fff;
+  margin: auto;
 }
 </style>

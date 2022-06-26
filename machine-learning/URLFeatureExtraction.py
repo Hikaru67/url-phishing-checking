@@ -457,8 +457,8 @@ def featureExtraction(url):
     features.append(1 if dns == 1 else domainAge(domain_name))# 25
     features.append(1 if dns == 1 else domainEnd(domain_name))
     
-    # features.append(rankHost(url))
-    # features.append(rankCountry(url))
+    features.append(rankHost(url))
+    features.append(rankCountry(url))
 
     # HTML & Javascript based features
     try:
@@ -521,7 +521,7 @@ def extractFeaturePhishing(type, index, limit = 1000):
     all_result_phishing = []
     all_result_legitimate = []
 
-    f1 = open("data_prepare/phishing2/verified_filter.txt", "r")
+    f1 = open("data_prepare/phishing2/26_06/filter.txt", "r")
     index = int(index)
     type = int(type)
     i = index
@@ -530,7 +530,7 @@ def extractFeaturePhishing(type, index, limit = 1000):
     lines = f1.readlines()
     while ((i-index) < limit):
         try:
-            f1 = open("data_prepare/phishing2/phishing_lost_rank" + str(int(index/limit)) + ".txt", "a")
+            f1 = open("data_prepare/phishing2/26_06/phishing_lost_rank" + str(int(index/limit)) + ".txt", "a")
             result_phishing = featureExtraction2(lines[i].replace('\n', ''))
             print(result_phishing, "i = ", i)
             result_phishing.append(type)

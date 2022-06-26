@@ -17,6 +17,9 @@ class CreateReportsTable extends Migration
             $table->id();
             $table->string('url');
             $table->tinyInteger('type')->default(1);
+            $table->string('label')->nullable();
+            $table->string('user_id')->nullable();
+            $table->string('ip')->nullable();
             $table->timestamps();
         });
     }
