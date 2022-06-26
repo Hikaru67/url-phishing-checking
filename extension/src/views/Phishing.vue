@@ -117,14 +117,11 @@ export default {
           args: [],
           func: () => {
             const url = window.location.href
-            console.log('getUrl => url', url)
             return url ? url : ''
           }
         }, async (result) => {
           console.log('getUrl => result', result)
-          if (result && result.length) {
-            this.url = result[0].result
-          }
+          this.url = result[0].result
           if (this.url) {
             await this.scanUrl(this.url)
           }

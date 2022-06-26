@@ -3,7 +3,7 @@
 const url = (new URLSearchParams(window.location.search)).get("url");
 const isFiltered = parseInt((new URLSearchParams(window.location.search)).get("is-filtered"));
 document.getElementById("url").textContent = url;
-document.getElementById("is-filtered").textContent = isFiltered ? ' (Result of filter)' : ' (Result of machine learning)';
+document.getElementById("is-filtered").textContent = isFiltered ? ' (Kết quả bộ lọc)' : ' (Kết quả học máy)';
 
 const getHostname = (url) => {
     return new URL(url).host
