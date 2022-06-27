@@ -2,6 +2,7 @@
 <html>
 <head>
 <title>Block Site</title>
+<meta charset="utf-8">
 <link rel="stylesheet" href="common.css">
 <style>
   body:not(.ready) #blocked-list::placeholder,
@@ -58,10 +59,9 @@
 </head>
 <body>
 
-<h1>Block Site</h1>
+<h1>Blocked Sites</h1>
 <p>
-  Specify sites you want to block below. Each site must be on a <strong>seperate line</strong>.
-  Sites starting with <code>!</code> will be exception to the rule, allowed.
+  Danh sách url bị chặn.
 </p>
 
 <textarea id="blocked-list" rows="10" cols="50" spellcheck="false"></textarea>
@@ -69,20 +69,13 @@
 
 <div id="controls">
   <div>
-    <label for="resolution-select">What to do when a site is blocked?</label>
-    <select id="resolution-select">
-      <option value="CLOSE_TAB">Close Tab</option>
-      <option value="SHOW_BLOCKED_INFO_PAGE">Show Blocked info page</option>
-    </select>
-  </div>
-  <div>
     <label for="enabled-toggle">Enabled?</label>
     <input id="enabled-toggle" type="checkbox">
   </div>
 </div>
 
 <br>
-<span>All changes are saved automatically.</span>
+<span>Tất cả các thay đổi đều đã được lưu tự động.</span>
 
 <script src="options.js"></script>
 </body>

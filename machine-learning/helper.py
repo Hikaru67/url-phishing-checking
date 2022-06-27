@@ -41,7 +41,7 @@ def prepareData():
         lines.append(legates[i])
     f2.close()
     all_result_phishing = pd.DataFrame(lines)
-    all_result_phishing.to_csv('data/26_06/processed.csv')
+    all_result_phishing.to_csv('data/27_06/processed.csv')
 
 def addFeature():
     lost = open("data_prepare/phishing2/26_06/phishing_merged.txt", "r")

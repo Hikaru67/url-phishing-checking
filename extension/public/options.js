@@ -18,15 +18,24 @@ blockedList.placeholder = [
 
 blockedList.addEventListener("change", (event) => {
   const blocked = event.target.value.split("\n").map(s => s.trim()).filter(Boolean);
+  console.log('🚀 ~ blocked', blocked)
+  chrome.storage.local.get(["enabled", "blocked", "resolution"], function (local) {
+    let { enabled, blocked } = local;
+    if (!Array.isArray(blocked)) {
+      return;
+    }
+    // blocked
+    blocked = blocked.map(bl => bl.url)
+  });
 
   chrome.storage.local.set({ blocked });
 });
 
-resolutionSelect.addEventListener("change", (event) => {
-  const resolution = event.target.value;
+// resolutionSelect.addEventListener("change", (event) => {
+//   const resolution = event.target.value;
 
-  chrome.storage.local.set({ resolution });
-});
+//   chrome.storage.local.set({ resolution });
+// });
 
 enabledToggle.addEventListener("change", (event) => {
   const enabled = event.target.checked;
@@ -36,19 +45,19 @@ enabledToggle.addEventListener("change", (event) => {
 
 window.addEventListener("DOMContentLoaded", () => {
   chrome.storage.local.get(["enabled", "blocked", "resolution"], function (local) {
-    let { enabled, blocked, resolution } = local;
+    let { enabled, blocked } = local;
     if (!Array.isArray(blocked)) {
       return;
     }
+    console.log('🚀 ~ local', local)
 
     // blocked
-    console.log('blocked', blocked)
     blocked = blocked.map(bl => bl.url)
     var value = blocked.join("\r\n"); // display every blocked in new line
     blockedList.value = value;
 
     // resolution
-    resolutionSelect.value = resolution;
+    // resolutionSelect.value = resolution;
 
     // enabled
     enabledToggle.checked = enabled;

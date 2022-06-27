@@ -40,7 +40,7 @@ import axios from 'axios'
 import { FEATURES } from './../config'
 
 const URL_MC = process.env.VUE_APP_URL + '/url-phishing-checking'
-const URL_RP = 'http://127.0.0.1:8000/api/report'
+const URL_RP = process.env.VUE_APP_URL + '/report'
 
 const LABEL = {
   good: 'good',
@@ -57,7 +57,7 @@ export default {
   data() {
     return {
       loading: false,
-      url: '',
+      url: 'https://marnet.atlassian.net/jira/your-work',
       label: 1,
       features: [],
       percent: 0,
@@ -119,15 +119,12 @@ export default {
             const url = window.location.href
             return url ? url : ''
           }
-        }, async (result) => {
-          console.log('getUrl => result', result)
-          this.url = result[0].result
-          if (this.url) {
-            await this.scanUrl(this.url)
-          }
-        });
+        })
+        console.log('🚀 ~ result', res)
+        this.url = res[0].result
       } catch (e) {
         console.warn('getUrl => e', e)
+        this.url = ''
       }
     },
 

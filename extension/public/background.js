@@ -95,7 +95,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
 
     if (!foundRule) {
       const result = await phishingChecking(url)
-      if (result.label) {
+      if (result.label && result.percent >= 80) {
         blocked.push({
           url,
           isFiltered: result.is_filtered

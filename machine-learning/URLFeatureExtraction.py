@@ -439,11 +439,6 @@ def featureExtraction(url):
     features.append(tinyURL(url))
     features.append(prefixSuffix(url))
 
-    # features.append(getDepth(url))
-    # features.append(redirection(url))
-    # features.append(tinyURL(url))
-    # features.append(prefixSuffix(url))
-
     # Domain based features (4)
     dns = 0
     try:
@@ -542,11 +537,11 @@ def extractFeaturePhishing(type, index, limit = 1000):
             i += 1
             pass
 
-def extractFeatureLegate(type, index, limit = 5000):
+def extractFeatureLegate(type, index, limit = 1000):
     all_result_phishing = []
     all_result_legitimate = []
 
-    f1 = open("data_prepare/webrank/domain.txt", "r")
+    f1 = open("data_prepare/27_06/top500.txt", "r")
     index = int(index)
     type = int(type)
     i = index
@@ -555,8 +550,8 @@ def extractFeatureLegate(type, index, limit = 5000):
     lines = f1.readlines()
     while ((i-index) < limit):
         try:
-            f1 = open("data_prepare/webrank/legate_fix" + str(int(index/limit)) + ".txt", "a")
-            result_phishing = featureExtraction2(lines[i].replace('\n', ''))
+            f1 = open("data_prepare/27_06/legate" + str(int(index/limit)) + ".txt", "a")
+            result_phishing = featureExtraction(lines[i].replace('\n', ''))
             print(result_phishing, "i = ", i)
             result_phishing.append(type)
             all_result_phishing.append(result_phishing)
