@@ -52,19 +52,24 @@
     height: 1.3em;
   }
 
-  #credits {
-    margin-top: 5em;
+  #url {
+    width: 350px;
   }
+
 </style>
 </head>
 <body>
 
 <h1>Blocked Sites</h1>
-<p>
-  Danh sách url bị chặn.
-</p>
+<p>Danh sách url bị chặn.</p>
+<div style="margin-bottom: 15px">
+  <input type="text" name="url" id="url">
+  <button class="btn btn-primary" id="btn-add">Thêm</button>
+  <button class="btn btn-clear" id="btn-clear">Xóa</button>
+  <button class="btn btn-clear-all" id="btn-clear-all">Xóa tất cả</button>
+</div>
 
-<textarea id="blocked-list" rows="10" cols="50" spellcheck="false"></textarea>
+<textarea id="blocked-list" rows="10" cols="50" spellcheck="false" disabled></textarea>
 <br>
 
 <div id="controls">

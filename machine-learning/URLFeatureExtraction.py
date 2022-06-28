@@ -422,14 +422,14 @@ def featureExtraction(url):
     features.append(httpInHostname(url))
     features.append(doubleSlashInPath(url))
 
-    features.append(numDots(url))# 11
+    features.append(numDots(url))# 11// 9
     features.append(numDashesInHostname(url))
     features.append(numUnderscore(url))
     features.append(numPercent(url))
     # features.append(numQueryComponents(url))# 15
     features.append(numAmpersand(url))
     features.append(numHash(url))
-    features.append(numNumericChars(url))
+    features.append(numNumericChars(url))# // 15
     # features.append(pathLength(url))
     # features.append(queryLength(url))
     features.append(numSensitiveWords(url))

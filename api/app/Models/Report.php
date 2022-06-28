@@ -23,6 +23,7 @@ class Report extends Model
         'url',
         'label',
         'type',
+        'features',
         'user_id',
         'ip'
     ];

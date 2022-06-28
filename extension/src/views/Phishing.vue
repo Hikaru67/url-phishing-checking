@@ -120,7 +120,6 @@ export default {
             return url ? url : ''
           }
         })
-        console.log('🚀 ~ result', res)
         this.url = res[0].result
       } catch (e) {
         console.warn('getUrl => e', e)
@@ -140,7 +139,7 @@ export default {
       this.clearData()
       this.isFiltered = !!data.is_filtered
       this.label = data.label
-      if (data.label) {
+      if (data.label && data.percent > 80) {
         await this.setBlockList(url, data)
       }
       this.percent = Math.round(data.percent)
@@ -208,7 +207,8 @@ export default {
       axios.post(URL_RP, {
         url: this.url,
         label: this.label,
-        type
+        type,
+        features: JSON.stringify(this.features)
       })
       switch (type) {
         case 1:
