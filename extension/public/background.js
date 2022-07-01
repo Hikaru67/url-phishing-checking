@@ -81,16 +81,17 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
   if (!url || !url.startsWith("http")) {
     return;
   }
-  console.log('🚀 ~ url', url)
+  console.log('🚀 ~ url background', url)
   const hostname = getHostname(url);
 
-  chrome.storage.local.get(["enabled", "blocked", "resolution"], async (local) => {
+  chrome.storage.local.get(["enabled", "blocked"], async (local) => {
     let { enabled, blocked } = local;
-    if (!enabled || !Array.isArray(blocked) || blocked.length === 0) {
+    console.log(blocked)
+    if (!enabled) {
       return;
     }
     
-    const foundRule = blocked.find((bl => getHostname(bl.url) === hostname));
+    let foundRule = blocked.find((bl => getHostname(bl.url) === hostname));
     console.log('async => foundRule', foundRule)
 
     if (!foundRule) {
@@ -102,7 +103,9 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
         })
         await chrome.storage.local.set({ blocked: blocked })
         // alert(result)
-        console.log('🚀 ~ result', result)
+        console.log('🚀 ~ result background', result)
+        foundRule = blocked.find((bl => getHostname(bl.url) === hostname))
+        await chrome.tabs.update(tabId, { url: `${chrome.runtime.getURL("blocked.html")}?url=${url}&is-filtered=${foundRule.isFiltered}` });
       }
     }
     if (!foundRule || foundRule.skip) {
@@ -115,7 +118,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
 
 const phishingChecking = async (url) => {
   const response = await postData(API_URL, { url })
-  console.log('🚀 ~ response', response)
+  console.log('🚀 ~ response background', response)
   return response
 }
 

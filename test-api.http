@@ -1,0 +1,6 @@
+POST http://14.225.44.73/api/url-phishing-checking HTTP/1.1
+content-type: application/json
+
+{
+    "url": "https://accounts.google.com/ServiceLogin/webreauth?service=chromewebstore&continue=https%3A%2F%2Fchrome.google.com%2Fwebstore%2Fdeveloper%2Fdashboard%3Fhl%3Dvi&passive=3600&hl=vi&authuser=0&flowName=GlifWebSignIn&flowEntry=ServiceLogin"
+}
