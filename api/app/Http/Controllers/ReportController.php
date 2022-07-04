@@ -37,14 +37,16 @@ class ReportController extends Controller
     {
         $request->validate([
             'url' => 'required|regex:/^(http(s?):\/\/)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/\/=]*)/',
-            'type' => 'required'
+            'type' => 'required',
+            'label' => 'required',
+            'features' => 'required'
         ]);
-
-        $data = $request->only(['url', 'type']);
+        $data = $request->only(['url', 'type', 'label', 'features']);
+        $data['ip'] = $request->ip();
 
         Report::create($data);
-        
-        
+
+        return response()->json(['data' => 'success'], 200);
     }
 
     /**

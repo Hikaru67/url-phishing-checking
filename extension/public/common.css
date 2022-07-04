@@ -22,3 +22,32 @@ a:hover {
 #continue:hover {
   cursor: pointer;
 }
+
+.btn {
+  padding: 5px;
+  border: 1px solid;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.btn:hover {
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: aqua;
+}
+
+.btn-clear {
+  background-color: tomato;
+}
+
+.btn-clear-all {
+  background-color: orangered;
+}
+
+input {
+  padding: 8px;
+  border: solid 1px;
+  font-size: 16px;
+}

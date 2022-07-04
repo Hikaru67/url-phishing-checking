@@ -39,7 +39,7 @@ class PhishingController extends Controller
                 'features' => [],
                 'suggestion' => $result->type ? 'bad' : 'good'
             ];
-            Cache::put($url, $res, now()->addMinutes(10));
+            Cache::put($url, $res);
 
             return response()->json($res, 200);
         }
@@ -49,7 +49,7 @@ class PhishingController extends Controller
         ]);
 
         $res = json_decode($response->body());
-        Cache::put($url, $res, now()->addMinutes(10));
+        Cache::put($url, $res);
 
         return response()->json($res, 200);
     }

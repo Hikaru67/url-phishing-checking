@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/url-phishing-checking', 'PhishingController@urlPhishingChecking');
 Route::get('urls', 'UrlController@index');
-Route::post('/report', 'UrlController@store');
+Route::post('/report', 'ReportController@store');
 Route::get('/clear-cache', function () {
     Cache::flush();
 });

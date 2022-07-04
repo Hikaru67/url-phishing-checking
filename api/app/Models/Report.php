@@ -9,14 +9,23 @@ class Report extends Model
 {
     use HasFactory;
 
-    const TYPE = [
+    const LABEL = [
         'WHITE_LIST' => 0,
         'BLACK_LIST' => 1,
     ];
 
+    const TYPE = [
+        'GOOD' => 1,
+        'BAD' => 2,
+    ];
+
     protected $fillable = [
         'url',
-        'type'
+        'label',
+        'type',
+        'features',
+        'user_id',
+        'ip'
     ];
 
     public $selectable = [
